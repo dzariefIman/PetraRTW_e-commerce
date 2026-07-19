@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+         http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+
+    <display-name>PetraRTW</display-name>
+
+    <!-- Complaint Servlet -->
+    <servlet>
+        <servlet-name>ComplaintServlet</servlet-name>
+        <servlet-class>petra.controller.ComplaintServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ComplaintServlet</servlet-name>
+        <url-pattern>/complaint</url-pattern>
+    </servlet-mapping>
+
+    <!-- Ticket Servlet -->
+    <servlet>
+        <servlet-name>TicketServlet</servlet-name>
+        <servlet-class>petra.controller.TicketServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TicketServlet</servlet-name>
+        <url-pattern>/tickets</url-pattern>
+        <url-pattern>/tickets/detail</url-pattern>
+    </servlet-mapping>
+
+    <!-- Feedback Servlet -->
+    <servlet>
+        <servlet-name>FeedbackServlet</servlet-name>
+        <servlet-class>petra.controller.FeedbackServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>FeedbackServlet</servlet-name>
+        <url-pattern>/feedback</url-pattern>
+    </servlet-mapping>
+
+    <!-- Auth Servlet -->
+    <servlet>
+        <servlet-name>AuthServlet</servlet-name>
+        <servlet-class>petra.controller.AuthServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AuthServlet</servlet-name>
+        <url-pattern>/login</url-pattern>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+
+    <!-- Home Servlet -->
+    <servlet>
+        <servlet-name>HomeServlet</servlet-name>
+        <servlet-class>petra.controller.HomeServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>HomeServlet</servlet-name>
+        <url-pattern>/home</url-pattern>
+    </servlet-mapping>
+
+    <!-- Product Detail Servlet -->
+    <servlet>
+        <servlet-name>ProductDetailServlet</servlet-name>
+        <servlet-class>petra.controller.ProductDetailServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ProductDetailServlet</servlet-name>
+        <url-pattern>/product</url-pattern>
+    </servlet-mapping>
+
+    <!-- Cart Servlet -->
+    <servlet>
+        <servlet-name>CartServlet</servlet-name>
+        <servlet-class>petra.controller.CartServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CartServlet</servlet-name>
+        <url-pattern>/cart</url-pattern>
+    </servlet-mapping>
+
+    <!-- Checkout Servlet -->
+    <servlet>
+        <servlet-name>CheckoutServlet</servlet-name>
+        <servlet-class>petra.controller.CheckoutServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CheckoutServlet</servlet-name>
+        <url-pattern>/checkout</url-pattern>
+    </servlet-mapping>
+
+    <!-- Purchase Servlet -->
+    <servlet>
+        <servlet-name>PurchaseServlet</servlet-name>
+        <servlet-class>petra.controller.PurchaseServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PurchaseServlet</servlet-name>
+        <url-pattern>/purchases</url-pattern>
+        <url-pattern>/purchases/detail</url-pattern>
+    </servlet-mapping>
+
+    <!-- Staff Dashboard Servlet -->
+    <servlet>
+        <servlet-name>StaffDashboardServlet</servlet-name>
+        <servlet-class>petra.controller.StaffDashboardServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>StaffDashboardServlet</servlet-name>
+        <url-pattern>/staff/home</url-pattern>
+    </servlet-mapping>
+
+    <!-- Staff Product Servlet -->
+    <servlet>
+        <servlet-name>StaffProductServlet</servlet-name>
+        <servlet-class>petra.controller.StaffProductServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>StaffProductServlet</servlet-name>
+        <url-pattern>/staff/products</url-pattern>
+    </servlet-mapping>
+
+    <!-- Staff Feedback Servlet -->
+    <servlet>
+        <servlet-name>StaffFeedbackServlet</servlet-name>
+        <servlet-class>petra.controller.StaffFeedbackServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>StaffFeedbackServlet</servlet-name>
+        <url-pattern>/staff/feedback</url-pattern>
+    </servlet-mapping>
+
+    <!-- Staff Customer Servlet -->
+    <servlet>
+        <servlet-name>StaffCustomerServlet</servlet-name>
+        <servlet-class>petra.controller.StaffCustomerServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>StaffCustomerServlet</servlet-name>
+        <url-pattern>/staff/customers</url-pattern>
+    </servlet-mapping>
+
+    <!-- Staff Purchase Servlet -->
+    <servlet>
+        <servlet-name>StaffPurchaseServlet</servlet-name>
+        <servlet-class>petra.controller.StaffPurchaseServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>StaffPurchaseServlet</servlet-name>
+        <url-pattern>/staff/purchases</url-pattern>
+    </servlet-mapping>
+
+    <!-- Staff Promotion Servlet -->
+    <servlet>
+        <servlet-name>StaffPromotionServlet</servlet-name>
+        <servlet-class>petra.controller.StaffPromotionServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>StaffPromotionServlet</servlet-name>
+        <url-pattern>/staff/promotions</url-pattern>
+    </servlet-mapping>
+
+    <!-- Staff Issue Servlet (list) -->
+    <servlet>
+        <servlet-name>StaffIssueServlet</servlet-name>
+        <servlet-class>petra.controller.StaffIssueServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>StaffIssueServlet</servlet-name>
+        <url-pattern>/staff/issues</url-pattern>
+    </servlet-mapping>
+
+    <!-- Staff Issue Detail Servlet -->
+    <servlet>
+        <servlet-name>StaffIssueDetailServlet</servlet-name>
+        <servlet-class>petra.controller.StaffIssueDetailServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>StaffIssueDetailServlet</servlet-name>
+        <url-pattern>/staff/issues/detail</url-pattern>
+    </servlet-mapping>
+
+    <!-- Promotion Servlet -->
+    <servlet>
+        <servlet-name>PromotionServlet</servlet-name>
+        <servlet-class>petra.controller.PromotionServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PromotionServlet</servlet-name>
+        <url-pattern>/promotions</url-pattern>
+    </servlet-mapping>
+
+    <!-- Auth Filter -->
+    <filter>
+        <filter-name>AuthFilter</filter-name>
+        <filter-class>petra.util.AuthFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthFilter</filter-name>
+        <url-pattern>/home</url-pattern>
+        <url-pattern>/product</url-pattern>
+        <url-pattern>/cart</url-pattern>
+        <url-pattern>/checkout</url-pattern>
+        <url-pattern>/purchases</url-pattern>
+        <url-pattern>/purchases/detail</url-pattern>
+        <url-pattern>/promotions</url-pattern>
+        <url-pattern>/tickets</url-pattern>
+        <url-pattern>/tickets/detail</url-pattern>
+        <url-pattern>/feedback</url-pattern>
+        <url-pattern>/complaint</url-pattern>
+        <url-pattern>/staff/*</url-pattern>
+        <url-pattern>/staff/feedback</url-pattern>
+    </filter-mapping>
+
+    <!-- Welcome page -->
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+
+    <!-- Session timeout 30 minutes -->
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
+
+</web-app>
