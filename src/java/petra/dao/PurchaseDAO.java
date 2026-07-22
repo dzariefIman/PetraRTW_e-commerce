@@ -130,12 +130,9 @@ public class PurchaseDAO {
 
             BigDecimal shippingFee = new BigDecimal("4.50");
             BigDecimal totalPrice = BigDecimal.ZERO;
-            StringBuilder desc = new StringBuilder();
             for (CartDBItem item : cart) {
                 if (!item.isOutOfStock()) {
                     totalPrice = totalPrice.add(item.getSubtotal());
-                    if (desc.length() > 0) desc.append(", ");
-                    desc.append(item.getTitle()).append(" x").append(item.getQuantity());
                 }
             }
             totalPrice = totalPrice.add(shippingFee);
@@ -152,11 +149,12 @@ public class PurchaseDAO {
             boolean first = true;
             for (CartDBItem item : cart) {
                 if (item.isOutOfStock()) continue;
+                String itemDesc = item.getTitle() + " x" + item.getQuantity();
                 try (PreparedStatement ps = conn.prepareStatement(insertSql, first ? Statement.RETURN_GENERATED_KEYS : Statement.NO_GENERATED_KEYS)) {
                     ps.setInt(1, custId);
                     ps.setString(2, orderNum);
                     ps.setString(3, paymentMethod);
-                    ps.setString(4, desc.toString());
+                    ps.setString(4, itemDesc);
                     ps.setString(5, item.getSize());
                     ps.setInt(6, item.getQuantity());
                     ps.setBigDecimal(7, item.getSubtotal());
