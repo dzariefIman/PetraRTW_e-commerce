@@ -508,8 +508,18 @@ tr:hover{background:#f9f9f9}
 .form-actions-submit{margin-top:1rem}
 .edit-modal-box{padding:28px;width:90%;max-width:600px;max-height:90vh;overflow-y:auto;position:relative}
 .edit-modal-box h2{margin:0 0 20px 0}
+.edit-modal-box .form-group{margin-bottom:14px}
+.edit-modal-box .form-group label{margin-bottom:6px}
+.edit-modal-box .form-textarea{min-height:70px}
 .edit-modal-actions{display:flex;gap:12px;justify-content:flex-end;margin-top:1.1rem}
 .flex-1{flex:1}
+
+/* ─── Product modal layout ─── */
+.form-row-2col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.sizes-grid{display:flex;gap:10px;flex-wrap:wrap}
+.size-cell{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:60px}
+.size-cell .stock-size-label{font-size:12px;font-weight:600;color:#666;text-transform:uppercase}
+.size-input{width:70px;text-align:center;padding:6px 8px !important}
 
 /* ─── Keep layout proportional to viewport — vw overrides ─── */
 .staff-header{padding:0.9vw 1.2vw !important}

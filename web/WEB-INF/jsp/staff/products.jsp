@@ -164,7 +164,7 @@
 
 <!-- Add/Edit Product Modal -->
 <div id="productModal" class="modal" aria-hidden="true">
-    <div class="modal-box">
+    <div class="modal-box edit-modal-box">
         <button class="modal-close" onclick="closeProductModal()">&times;</button>
         <h2 id="modalTitle" style="margin-top:0">Add Product</h2>
         <form id="productForm" method="POST" enctype="multipart/form-data">
@@ -172,33 +172,34 @@
             <input type="hidden" name="product_id" id="modalProductId" value="">
 
             <div class="form-group">
-                <label for="productTitle">Product Title * (2-255 characters)</label>
-                <input type="text" id="productTitle" name="title" required maxlength="255">
+                <label for="productTitle">Product Title *</label>
+                <input type="text" id="productTitle" name="title" class="form-input" required maxlength="255" placeholder="Enter product title">
                 <div class="validation-error" data-error="title"></div>
             </div>
 
             <div class="form-group">
-                <label for="productPrice">Price * (RM0.01 - RM999,999.99)</label>
-                <input type="number" id="productPrice" name="price" step="0.01" min="0.01" max="999999.99" required>
+                <label for="productPrice">Price (RM) *</label>
+                <input type="number" id="productPrice" name="price" class="form-input" step="0.01" min="0.01" max="999999.99" required placeholder="0.00">
                 <div class="validation-error" data-error="price"></div>
             </div>
 
             <div class="form-group">
                 <label for="productDescription">Description</label>
-                <textarea id="productDescription" name="description" placeholder="Write product description..."></textarea>
+                <textarea id="productDescription" name="description" class="form-textarea" placeholder="Write product description..."></textarea>
             </div>
 
-            <div class="form-group">
-                <label for="productGroup">Group/Category</label>
-                <input type="text" id="productGroup" name="group_name" placeholder="e.g., Petra Lebaran 26">
-            </div>
-
-            <div class="form-group">
-                <label for="productItemType">Item Type *</label>
-                <select id="productItemType" name="item_type" required onchange="toggleSizeFields()">
-                    <option value="cloth">Cloth (S/M/L/XL)</option>
-                    <option value="scarves">Scarves (One Size)</option>
-                </select>
+            <div class="form-row-2col">
+                <div class="form-group">
+                    <label for="productGroup">Group/Category</label>
+                    <input type="text" id="productGroup" name="group_name" class="form-input" placeholder="e.g., Petra Lebaran 26">
+                </div>
+                <div class="form-group">
+                    <label for="productItemType">Item Type *</label>
+                    <select id="productItemType" name="item_type" class="form-select" required onchange="toggleSizeFields()">
+                        <option value="cloth">Cloth (S/M/L/XL)</option>
+                        <option value="scarves">Scarves (One Size)</option>
+                    </select>
+                </div>
             </div>
 
             <div class="form-group">
@@ -212,35 +213,37 @@
 
             <div class="form-group" id="clothSizes">
                 <label>Sizes and Stock</label>
-                <div id="sizesContainer" class="sizes-container">
-                    <div class="size-row">
-                        <span class="stock-size-label">S:</span>
-                        <input type="number" name="size_s" min="0" class="size-row-qty" value="0">
+                <div id="sizesContainer" class="sizes-grid">
+                    <div class="size-cell">
+                        <span class="stock-size-label">S</span>
+                        <input type="number" name="size_s" min="0" class="form-input size-input" value="0">
                     </div>
-                    <div class="size-row">
-                        <span class="stock-size-label">M:</span>
-                        <input type="number" name="size_m" min="0" class="size-row-qty" value="0">
+                    <div class="size-cell">
+                        <span class="stock-size-label">M</span>
+                        <input type="number" name="size_m" min="0" class="form-input size-input" value="0">
                     </div>
-                    <div class="size-row">
-                        <span class="stock-size-label">L:</span>
-                        <input type="number" name="size_l" min="0" class="size-row-qty" value="0">
+                    <div class="size-cell">
+                        <span class="stock-size-label">L</span>
+                        <input type="number" name="size_l" min="0" class="form-input size-input" value="0">
                     </div>
-                    <div class="size-row">
-                        <span class="stock-size-label">XL:</span>
-                        <input type="number" name="size_xl" min="0" class="size-row-qty" value="0">
+                    <div class="size-cell">
+                        <span class="stock-size-label">XL</span>
+                        <input type="number" name="size_xl" min="0" class="form-input size-input" value="0">
                     </div>
                 </div>
             </div>
 
             <div class="form-group" id="scarvesSizes" style="display:none">
                 <label>Stock</label>
-                <div class="size-row">
-                    <span class="stock-size-label">One Size:</span>
-                    <input type="number" name="size_one" min="0" class="size-row-qty" value="0">
+                <div class="sizes-grid">
+                    <div class="size-cell">
+                        <span class="stock-size-label">One Size</span>
+                        <input type="number" name="size_one" min="0" class="form-input size-input" value="0">
+                    </div>
                 </div>
             </div>
 
-            <div class="form-actions">
+            <div class="edit-modal-actions">
                 <button type="button" class="btn-cancel" onclick="closeProductModal()">Cancel</button>
                 <button type="submit" class="btn-save">Save Product</button>
             </div>
