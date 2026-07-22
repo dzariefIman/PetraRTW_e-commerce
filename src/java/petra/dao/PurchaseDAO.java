@@ -57,7 +57,6 @@ public class PurchaseDAO {
                     p.setCustId(rs.getInt("cust_id"));
                     p.setCreatedTime(rs.getString("created_time"));
                     p.setPaymentMethod(rs.getString("payment_method"));
-                    p.setPurchaseDesc(rs.getString("purchase_desc"));
                     p.setTotalQty(rs.getInt("total_qty"));
                     p.setItemCount(rs.getInt("item_count"));
                     p.setShippingFee(rs.getBigDecimal("shipping_fee"));
@@ -102,7 +101,6 @@ public class PurchaseDAO {
                     p.setCustId(rs.getInt("cust_id"));
                     p.setCreatedTime(rs.getString("created_time"));
                     p.setPaymentMethod(rs.getString("payment_method"));
-                    p.setPurchaseDesc(rs.getString("purchase_desc"));
                     p.setTotalQty(rs.getInt("total_qty"));
                     p.setItemCount(rs.getInt("item_count"));
                     p.setShippingFee(rs.getBigDecimal("shipping_fee"));
