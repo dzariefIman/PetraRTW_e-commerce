@@ -40,10 +40,10 @@ public class PurchaseDAO {
             orderBy = "MIN(created_time) ASC";
         }
         String sql = "SELECT MIN(purchase_id) AS first_id, order_num, cust_id, MIN(created_time) AS created_time, "
-                   + "payment_method, purchase_desc, SUM(quantity) AS total_qty, SUM(item_sub_total) AS subtotal, "
+                   + "payment_method, SUM(quantity) AS total_qty, SUM(item_sub_total) AS subtotal, "
                    + "shipping_fee, voucher_amount, total_price, COUNT(*) AS item_count "
                    + "FROM purchases WHERE cust_id = ? "
-                   + "GROUP BY order_num, cust_id, payment_method, purchase_desc, shipping_fee, voucher_amount, total_price "
+                   + "GROUP BY order_num, cust_id, payment_method, shipping_fee, voucher_amount, total_price "
                    + "ORDER BY " + orderBy;
         List<Purchase> list = new ArrayList<Purchase>();
         try (Connection conn = DBConnection.getConnection();
@@ -86,10 +86,10 @@ public class PurchaseDAO {
 
     public Purchase findOrderSummary(String orderNum, int custId) throws SQLException {
         String sql = "SELECT MIN(purchase_id) AS first_id, order_num, cust_id, MIN(created_time) AS created_time, "
-                   + "payment_method, purchase_desc, SUM(quantity) AS total_qty, SUM(item_sub_total) AS subtotal, "
+                   + "payment_method, SUM(quantity) AS total_qty, SUM(item_sub_total) AS subtotal, "
                    + "shipping_fee, voucher_amount, total_price, COUNT(*) AS item_count "
                    + "FROM purchases WHERE order_num = ? AND cust_id = ? "
-                   + "GROUP BY order_num, cust_id, payment_method, purchase_desc, shipping_fee, voucher_amount, total_price";
+                   + "GROUP BY order_num, cust_id, payment_method, shipping_fee, voucher_amount, total_price";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, orderNum);
