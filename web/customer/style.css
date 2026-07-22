@@ -180,10 +180,10 @@ body{margin:0;background:#f0efe9;font-family:system-ui,Segoe UI,Arial,sans-serif
 .chat-thread::-webkit-scrollbar-thumb{background:#ceb89f;border-radius:999px}
 .chat-thread::-webkit-scrollbar-track{background:transparent}
 .chat-message{position:relative;max-width:82%;padding:14px 16px;border-radius:16px;border:1px solid #e6e0da;background:#faf7f2}
-.chat-message.staff{margin-left:auto;background:#c79b69;color:#2f1f0f;border-color:#c79b69;border-top-right-radius:6px}
-.chat-message.customer{margin-right:auto;background:#fff;border-top-left-radius:6px}
+.chat-message.staff{margin-right:auto;background:#fff;border-top-left-radius:6px}
+.chat-message.customer{margin-left:auto;background:#c79b69;color:#2f1f0f;border-color:#c79b69;border-top-right-radius:6px}
 .chat-meta{display:flex;justify-content:space-between;gap:10px;font-size:12px;margin-bottom:8px;opacity:.85}
-.chat-message.staff .chat-meta{color:#4a3118}
+.chat-message.staff .chat-meta{color:#666}
 .chat-author{font-weight:700}
 .chat-time{white-space:nowrap}
 .chat-text{line-height:1.6;white-space:pre-wrap;word-break:break-word}
