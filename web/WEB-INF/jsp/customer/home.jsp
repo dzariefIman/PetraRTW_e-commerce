@@ -33,15 +33,15 @@
                     <% if (products != null) { for (Product p : products) { %>
                         <div style="flex:0 0 24%;min-width:24%;background:#fff;border:none;border-radius:0.4vw;padding:0;display:flex;flex-direction:column;gap:0.45vw;overflow:hidden">
                             <div style="width:100%;aspect-ratio:3/4;display:flex;align-items:center;justify-content:center;background:#fafafa;overflow:hidden;border-radius:0.4vw;cursor:pointer"
-                                 onclick="window.location.href='<%= ctx %>/product?id=<%= p.getShopProductId() %>'">
+                                 onclick="window.location.href='<%= ctx %>/product?id=<%= p.getProductId() %>'">
                                 <% if (p.getProductImage() != null && !p.getProductImage().isEmpty()) { %>
                                     <img src="<%= ctx + "/" + p.getProductImage() %>" alt="" style="width:100%;height:100%;object-fit:cover;display:block">
                                 <% } else { %>
                                     <div style="color:#999">No image</div>
                                 <% } %>
                             </div>
-                            <div style="font-weight:700;font-size:0.95vw;line-height:1.25;color:#333"><%= p.getShopProductTitle() %></div>
-                            <div style="color:#666;font-size:0.95vw">RM<%= String.format("%.2f", p.getShopProductPrice()) %></div>
+                            <div style="font-weight:700;font-size:0.95vw;line-height:1.25;color:#333"><%= p.getProductTitle() %></div>
+                            <div style="color:#666;font-size:0.95vw">RM<%= String.format("%.2f", p.getProductPrice()) %></div>
                         </div>
                     <% } } %>
                 </div>

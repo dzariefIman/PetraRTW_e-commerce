@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import petra.dao.CartDAO;
 import petra.dao.ProductDAO;
-import petra.model.CartDBItem;
+import petra.model.Cart;
 import petra.model.Product;
 
 public class CartServlet extends HttpServlet {
@@ -37,12 +37,12 @@ public class CartServlet extends HttpServlet {
                     throw new ServletException(e);
                 }
             }
-            resp.sendRedirect(req.getContextPath() + "/cart");
+        resp.sendRedirect(req.getContextPath() + "/cart");
             return;
         }
 
         try {
-            List<CartDBItem> items = cartDAO.findByCustId(custId);
+            List<Cart> items = cartDAO.findByCustId(custId);
             req.setAttribute("cartItems", items);
         } catch (SQLException e) {
             throw new ServletException(e);
@@ -67,18 +67,18 @@ public class CartServlet extends HttpServlet {
                 int qty = Math.max(1, parseInt(req.getParameter("quantity")));
 
                 if (productId <= 0 || size.isEmpty()) {
-                    resp.sendRedirect(req.getContextPath() + "/cart");
+                    resp.sendRedirect(req.getContextPath() + "/product?id=" + productId);
                     return;
                 }
 
                 Product p = productDAO.findById(productId);
                 if (p == null) {
-                    resp.sendRedirect(req.getContextPath() + "/cart");
+                    resp.sendRedirect(req.getContextPath() + "/home");
                     return;
                 }
 
                 int available = p.getStockForSize(size);
-                CartDBItem existing = cartDAO.findExisting(custId, productId, size);
+                Cart existing = cartDAO.findExisting(custId, productId, size);
                 int currentQty = existing != null ? existing.getQuantity() : 0;
                 int newTotal = currentQty + qty;
 
@@ -86,7 +86,7 @@ public class CartServlet extends HttpServlet {
                     newTotal = available;
                 }
                 if (newTotal <= 0) {
-                    resp.sendRedirect(req.getContextPath() + "/cart");
+                    resp.sendRedirect(req.getContextPath() + "/product?id=" + productId);
                     return;
                 }
 
@@ -95,6 +95,10 @@ public class CartServlet extends HttpServlet {
                 } else {
                     cartDAO.addItem(custId, productId, size, qty);
                 }
+
+                session.setAttribute("cartMsg", "Item added to cart!");
+                resp.sendRedirect(req.getContextPath() + "/product?id=" + productId);
+                return;
 
             } else if ("update".equals(action)) {
                 int cartId = parseInt(req.getParameter("cartId"));

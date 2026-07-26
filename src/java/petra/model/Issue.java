@@ -4,7 +4,7 @@ public class Issue {
     private int issueId;
     private Integer ticketNum;
     private Integer custId;
-    private Integer purchaseId;
+    private Integer orderId;
     private String orderNum;
     private String title;
     private String issueDesc;
@@ -26,8 +26,8 @@ public class Issue {
     public void setTicketNum(Integer ticketNum) { this.ticketNum = ticketNum; }
     public Integer getCustId() { return custId; }
     public void setCustId(Integer custId) { this.custId = custId; }
-    public Integer getPurchaseId() { return purchaseId; }
-    public void setPurchaseId(Integer purchaseId) { this.purchaseId = purchaseId; }
+    public Integer getOrderId() { return orderId; }
+    public void setOrderId(Integer orderId) { this.orderId = orderId; }
     public String getOrderNum() { return orderNum; }
     public void setOrderNum(String orderNum) { this.orderNum = orderNum; }
     public String getTitle() { return title; }

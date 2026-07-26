@@ -1,14 +1,14 @@
 ﻿<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="java.util.*, petra.model.CartDBItem, java.math.BigDecimal" %>
+<%@page import="java.util.*, petra.model.Cart, java.math.BigDecimal" %>
 <%
     request.setAttribute("pageTitle", "Shopping Cart");
     request.setAttribute("activePage", "cart");
-    List<CartDBItem> cartItems = (List<CartDBItem>) request.getAttribute("cartItems");
-    if (cartItems == null) { cartItems = new ArrayList<CartDBItem>(); }
+    List<Cart> cartItems = (List<Cart>) request.getAttribute("cartItems");
+    if (cartItems == null) { cartItems = new ArrayList<Cart>(); }
 
-    List<CartDBItem> inStockItems = new ArrayList<CartDBItem>();
-    List<CartDBItem> outOfStockItems = new ArrayList<CartDBItem>();
-    for (CartDBItem item : cartItems) {
+    List<Cart> inStockItems = new ArrayList<Cart>();
+    List<Cart> outOfStockItems = new ArrayList<Cart>();
+    for (Cart item : cartItems) {
         if (item.isOutOfStock()) {
             outOfStockItems.add(item);
         } else {
@@ -17,7 +17,7 @@
     }
 
     BigDecimal subtotal = BigDecimal.ZERO;
-    for (CartDBItem item : inStockItems) {
+    for (Cart item : inStockItems) {
         subtotal = subtotal.add(item.getSubtotal());
     }
     BigDecimal shipping = BigDecimal.valueOf(4.50);
@@ -44,7 +44,7 @@
     <div class="cart-layout">
         <div>
             <% if (!inStockItems.isEmpty()) { %>
-                <% for (CartDBItem item : inStockItems) { %>
+                <% for (Cart item : inStockItems) { %>
                     <div class="cart-item">
                         <div class="cart-item-image">
                             <% if (item.getProductImage() != null && !item.getProductImage().isEmpty()) { %>
@@ -81,7 +81,7 @@
             <% if (!outOfStockItems.isEmpty()) { %>
                 <div class="out-of-stock-section">
                     <div class="out-of-stock-header">Out of Stock</div>
-                    <% for (CartDBItem item : outOfStockItems) { %>
+                    <% for (Cart item : outOfStockItems) { %>
                         <div class="cart-item out-of-stock-item">
                             <div class="cart-item-image">
                                 <% if (item.getProductImage() != null && !item.getProductImage().isEmpty()) { %>

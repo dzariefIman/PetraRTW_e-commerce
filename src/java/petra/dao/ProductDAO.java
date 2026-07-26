@@ -13,7 +13,7 @@ import petra.util.DBConnection;
 public class ProductDAO {
 
     public Product findById(int id) throws SQLException {
-        String sql = "SELECT * FROM shop_products WHERE shop_product_id = ?";
+        String sql = "SELECT * FROM products WHERE product_id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
@@ -23,7 +23,7 @@ public class ProductDAO {
 
     public List<Product> findByGroup(String collection) throws SQLException {
         List<Product> list = new ArrayList<Product>();
-        String sql = "SELECT * FROM shop_products WHERE collection = ? ORDER BY created_time DESC";
+        String sql = "SELECT * FROM products WHERE collection = ? ORDER BY created_time DESC";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, collection);
@@ -34,7 +34,7 @@ public class ProductDAO {
 
     public List<String> findAllCollections() throws SQLException {
         List<String> groups = new ArrayList<String>();
-        String sql = "SELECT DISTINCT collection FROM shop_products WHERE collection IS NOT NULL AND collection != '' ORDER BY collection";
+        String sql = "SELECT DISTINCT collection FROM products WHERE collection IS NOT NULL AND collection != '' ORDER BY collection";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
@@ -45,7 +45,7 @@ public class ProductDAO {
 
     public List<Product> findUncategorized() throws SQLException {
         List<Product> list = new ArrayList<Product>();
-        String sql = "SELECT * FROM shop_products WHERE collection IS NULL OR collection = '' ORDER BY created_time DESC";
+        String sql = "SELECT * FROM products WHERE collection IS NULL OR collection = '' ORDER BY created_time DESC";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
@@ -56,7 +56,7 @@ public class ProductDAO {
 
     public List<Product> findAll() throws SQLException {
         List<Product> list = new ArrayList<Product>();
-        String sql = "SELECT * FROM shop_products ORDER BY created_time DESC";
+        String sql = "SELECT * FROM products ORDER BY created_time DESC";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
@@ -66,10 +66,10 @@ public class ProductDAO {
     }
 
     public int countAll(String searchName, String searchGroup) throws SQLException {
-        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM shop_products WHERE 1=1");
+        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM products WHERE 1=1");
         List<Object> params = new ArrayList<Object>();
         if (searchName != null && !searchName.trim().isEmpty()) {
-            sql.append(" AND shop_product_title LIKE ?");
+            sql.append(" AND UPPER(product_title) LIKE UPPER(?)");
             params.add("%" + searchName.trim() + "%");
         }
         if (searchGroup != null && !searchGroup.trim().isEmpty()) {
@@ -85,17 +85,17 @@ public class ProductDAO {
 
     public List<Product> findAllPaged(int page, int perPage, String searchName, String searchGroup) throws SQLException {
         List<Product> list = new ArrayList<Product>();
-        StringBuilder sql = new StringBuilder("SELECT * FROM shop_products WHERE 1=1");
+        StringBuilder sql = new StringBuilder("SELECT * FROM products WHERE 1=1");
         List<Object> params = new ArrayList<Object>();
         if (searchName != null && !searchName.trim().isEmpty()) {
-            sql.append(" AND shop_product_title LIKE ?");
+            sql.append(" AND UPPER(product_title) LIKE UPPER(?)");
             params.add("%" + searchName.trim() + "%");
         }
         if (searchGroup != null && !searchGroup.trim().isEmpty()) {
             sql.append(" AND collection = ?");
             params.add(searchGroup.trim());
         }
-        sql.append(" ORDER BY shop_product_title ASC");
+        sql.append(" ORDER BY product_title ASC");
         sql.append(" OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
         params.add((page - 1) * perPage);
         params.add(perPage);
@@ -108,24 +108,24 @@ public class ProductDAO {
     }
 
     public Product findByTitle(String title) throws SQLException {
-        String sql = "SELECT shop_product_id FROM shop_products WHERE shop_product_title = ?";
+        String sql = "SELECT product_id FROM products WHERE product_title = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, title);
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) { Product p = new Product(); p.setShopProductId(rs.getInt(1)); return p; }
+                if (rs.next()) { Product p = new Product(); p.setProductId(rs.getInt(1)); return p; }
             }
         }
         return null;
     }
 
     public boolean insert(Product p) throws SQLException {
-        String sql = "INSERT INTO shop_products (shop_product_title, shop_product_price, shop_product_desc, product_image, collection, item_type, size_s, size_m, size_l, size_xl) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO products (product_title, product_price, product_desc, product_image, collection, item_type, size_s, size_m, size_l, size_xl) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
-            ps.setString(1, p.getShopProductTitle());
-            ps.setBigDecimal(2, p.getShopProductPrice());
-            ps.setString(3, p.getShopProductDesc());
+            ps.setString(1, p.getProductTitle());
+            ps.setBigDecimal(2, p.getProductPrice());
+            ps.setString(3, p.getProductDesc());
             ps.setString(4, p.getProductImage());
             ps.setString(5, p.getCollection());
             ps.setString(6, p.getItemType() != null ? p.getItemType() : "cloth");
@@ -135,19 +135,19 @@ public class ProductDAO {
             ps.setInt(10, p.getSizeXL());
             int affected = ps.executeUpdate();
             if (affected > 0) {
-                try (ResultSet rs = ps.getGeneratedKeys()) { if (rs.next()) p.setShopProductId(rs.getInt(1)); }
+                try (ResultSet rs = ps.getGeneratedKeys()) { if (rs.next()) p.setProductId(rs.getInt(1)); }
             }
             return affected > 0;
         }
     }
 
     public boolean update(Product p) throws SQLException {
-        String sql = "UPDATE shop_products SET shop_product_title = ?, shop_product_price = ?, shop_product_desc = ?, product_image = ?, collection = ?, item_type = ?, size_s = ?, size_m = ?, size_l = ?, size_xl = ? WHERE shop_product_id = ?";
+        String sql = "UPDATE products SET product_title = ?, product_price = ?, product_desc = ?, product_image = ?, collection = ?, item_type = ?, size_s = ?, size_m = ?, size_l = ?, size_xl = ? WHERE product_id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, p.getShopProductTitle());
-            ps.setBigDecimal(2, p.getShopProductPrice());
-            ps.setString(3, p.getShopProductDesc());
+            ps.setString(1, p.getProductTitle());
+            ps.setBigDecimal(2, p.getProductPrice());
+            ps.setString(3, p.getProductDesc());
             ps.setString(4, p.getProductImage());
             ps.setString(5, p.getCollection());
             ps.setString(6, p.getItemType() != null ? p.getItemType() : "cloth");
@@ -155,13 +155,13 @@ public class ProductDAO {
             ps.setInt(8, p.getSizeM());
             ps.setInt(9, p.getSizeL());
             ps.setInt(10, p.getSizeXL());
-            ps.setInt(11, p.getShopProductId());
+            ps.setInt(11, p.getProductId());
             return ps.executeUpdate() > 0;
         }
     }
 
     public boolean delete(int id) throws SQLException {
-        String sql = "DELETE FROM shop_products WHERE shop_product_id = ?";
+        String sql = "DELETE FROM products WHERE product_id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
@@ -171,10 +171,10 @@ public class ProductDAO {
 
     private Product map(ResultSet rs) throws SQLException {
         Product p = new Product();
-        p.setShopProductId(rs.getInt("shop_product_id"));
-        p.setShopProductTitle(rs.getString("shop_product_title"));
-        p.setShopProductPrice(rs.getBigDecimal("shop_product_price"));
-        p.setShopProductDesc(rs.getString("shop_product_desc"));
+        p.setProductId(rs.getInt("product_id"));
+        p.setProductTitle(rs.getString("product_title"));
+        p.setProductPrice(rs.getBigDecimal("product_price"));
+        p.setProductDesc(rs.getString("product_desc"));
         p.setProductImage(rs.getString("product_image"));
         p.setCreatedTime(rs.getString("created_time"));
         p.setCollection(rs.getString("collection"));

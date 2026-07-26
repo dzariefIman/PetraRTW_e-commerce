@@ -1,8 +1,8 @@
 ﻿-- PetraRTW Database Schema
 -- Matches class diagram exactly
 
--- Staff
-CREATE TABLE staff (
+-- Sales Admin
+CREATE TABLE sales_admin (
     staff_id INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
     staff_name VARCHAR(100),
     username VARCHAR(50) NOT NULL UNIQUE,
@@ -26,12 +26,12 @@ CREATE TABLE customers (
     PRIMARY KEY (cust_id)
 );
 
--- Shop Products
-CREATE TABLE shop_products (
-    shop_product_id INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
-    shop_product_title VARCHAR(255) NOT NULL,
-    shop_product_price DECIMAL(10,2),
-    shop_product_desc LONG VARCHAR,
+-- Products
+CREATE TABLE products (
+    product_id INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+    product_title VARCHAR(255) NOT NULL,
+    product_price DECIMAL(10,2),
+    product_desc LONG VARCHAR,
     product_image VARCHAR(500),
     created_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     collection VARCHAR(100),
@@ -41,7 +41,7 @@ CREATE TABLE shop_products (
     size_l INTEGER DEFAULT 0,
     size_xl INTEGER DEFAULT 0,
     advertisement_id INTEGER,
-    PRIMARY KEY (shop_product_id)
+    PRIMARY KEY (product_id)
 );
 
 -- Advertisements / Promotions
@@ -61,13 +61,15 @@ CREATE TABLE advertisements (
     PRIMARY KEY (ads_id)
 );
 
--- Purchases / Orders
-CREATE TABLE purchases (
-    purchase_id INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+-- Orders (renamed from purchases)
+CREATE TABLE orders (
+    order_id INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
     cust_id INTEGER,
     order_num VARCHAR(20),
     payment_method VARCHAR(20),
-    purchase_desc LONG VARCHAR,
+    payment_gateway VARCHAR(30),
+    gateway_ref VARCHAR(100),
+    item_desc LONG VARCHAR,
     size VARCHAR(10),
     quantity INTEGER DEFAULT 1,
     item_sub_total DECIMAL(10,2),
@@ -76,8 +78,28 @@ CREATE TABLE purchases (
     total_price DECIMAL(10,2),
     product_image VARCHAR(500),
     created_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    shop_product_id INTEGER,
-    PRIMARY KEY (purchase_id)
+    product_id INTEGER,
+    order_status VARCHAR(20) DEFAULT 'NEW',
+    PRIMARY KEY (order_id)
+);
+
+-- Payments
+CREATE TABLE payments (
+    payment_id INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+    order_id INTEGER NOT NULL,
+    order_num VARCHAR(20) NOT NULL,
+    payment_method VARCHAR(20) NOT NULL,
+    gateway VARCHAR(30),
+    gateway_ref VARCHAR(100),
+    amount DECIMAL(10,2) NOT NULL,
+    currency VARCHAR(3) DEFAULT 'MYR',
+    status VARCHAR(20) DEFAULT 'INITIATED',
+    error_code VARCHAR(50),
+    error_message VARCHAR(255),
+    paid_at TIMESTAMP,
+    created_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_time TIMESTAMP,
+    PRIMARY KEY (payment_id)
 );
 
 -- Issues / Complaints
@@ -85,7 +107,7 @@ CREATE TABLE issues (
     issue_id INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
     ticket_num INTEGER,
     cust_id INTEGER,
-    purchase_id INTEGER,
+    order_id INTEGER,
     order_num VARCHAR(20),
     title VARCHAR(255) NOT NULL,
     issue_desc LONG VARCHAR,
@@ -97,22 +119,19 @@ CREATE TABLE issues (
     PRIMARY KEY (issue_id)
 );
 
--- Issue Comments
-CREATE TABLE issue_comments (
-    issue_comments_id INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+-- Issue Chat
+CREATE TABLE issue_chat (
+    issue_chat_id INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
     issue_id INTEGER NOT NULL,
     staff_id INTEGER,
     cust_id INTEGER,
-    comment_text LONG VARCHAR NOT NULL,
+    chat_text LONG VARCHAR NOT NULL,
     created_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     issue_attachment VARCHAR(500),
     updated_time TIMESTAMP,
-    reply_to_comment_id INTEGER,
-    PRIMARY KEY (issue_comments_id)
+    reply_to_chat_id INTEGER,
+    PRIMARY KEY (issue_chat_id)
 );
-
--- ALTER TABLE issue_comments ADD COLUMN cust_id INTEGER;
--- ALTER TABLE issue_comments ADD COLUMN reply_to_comment_id INTEGER;
 
 -- Feedback
 CREATE TABLE feedback (
@@ -124,7 +143,7 @@ CREATE TABLE feedback (
     created_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     order_num VARCHAR(20),
     rating INTEGER,
-    purchase_id INTEGER,
+    order_id INTEGER,
     product_name VARCHAR(255),
     PRIMARY KEY (feedback_id)
 );
@@ -133,11 +152,11 @@ CREATE TABLE feedback (
 CREATE TABLE cart (
     cart_id INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
     cust_id INTEGER NOT NULL,
-    shop_product_id INTEGER NOT NULL,
+    product_id INTEGER NOT NULL,
     size VARCHAR(5) NOT NULL,
     quantity INTEGER NOT NULL DEFAULT 1,
     created_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (cart_id),
     FOREIGN KEY (cust_id) REFERENCES customers(cust_id),
-    FOREIGN KEY (shop_product_id) REFERENCES shop_products(shop_product_id)
+    FOREIGN KEY (product_id) REFERENCES products(product_id)
 );

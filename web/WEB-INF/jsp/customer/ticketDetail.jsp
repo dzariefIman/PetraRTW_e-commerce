@@ -1,10 +1,10 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="java.util.*, petra.model.Issue, petra.model.IssueComment" %>
+<%@page import="java.util.*, petra.model.Issue, petra.model.IssueChat" %>
 <%
     request.setAttribute("activePage", "tickets");
     Issue issue = (Issue) request.getAttribute("issue");
-    List<IssueComment> comments = (List<IssueComment>) request.getAttribute("comments");
-    if (comments == null) comments = new ArrayList<IssueComment>();
+    List<IssueChat> chats = (List<IssueChat>) request.getAttribute("chats");
+    if (chats == null) chats = new ArrayList<IssueChat>();
     String msg = request.getParameter("msg");
     String ctx = request.getContextPath();
     request.setAttribute("pageTitle", "Ticket #" + (issue != null ? issue.getTicketNum() : ""));
@@ -52,16 +52,16 @@
         </div>
     <% } %>
 
-    <div class="comments-section" style="margin-top:28px;padding-top:28px;border-top:2px solid #eee">
+    <div class="chats-section" style="margin-top:28px;padding-top:28px;border-top:2px solid #eee">
         <h2 style="margin:0 0 20px;font-size:18px;color:#333">Chat</h2>
 
         <div class="chat-thread" id="chatThread" data-issue-id="<%= issue.getIssueId() %>" style="border:1px solid #eee;border-radius:8px;">
-            <% if (comments.isEmpty()) { %>
-                <div class="empty-comments" id="chatEmpty" style="text-align:center;padding:30px;color:#999;font-size:14px">No messages yet. Start the conversation below.</div>
+            <% if (chats.isEmpty()) { %>
+                <div class="empty-chats" id="chatEmpty" style="text-align:center;padding:30px;color:#999;font-size:14px">No messages yet. Start the conversation below.</div>
             <% } else { %>
                 <% String lastDateKey = ""; %>
                 <% int lastStaffSenderId = 0; %>
-                <% for (IssueComment c : comments) {
+                <% for (IssueChat c : chats) {
                     String dateKey = c.getCreatedTime() != null && c.getCreatedTime().length() >= 10 ? c.getCreatedTime().substring(0, 10) : "";
                     if (!dateKey.equals(lastDateKey) && !dateKey.isEmpty()) { %>
                         <div class="chat-date-separator"><span><%= dateKey %></span></div>
@@ -69,21 +69,21 @@
                     }
                     boolean isStaff = (c.getStaffId() != null);
                     boolean isOwn = isStaff ? false : true;
-                    String senderName = c.getSenderName() != null ? c.getSenderName() : (isStaff ? "Staff" : "You");
+                    String senderName = c.getSenderName() != null ? c.getSenderName() : (isStaff ? "Sales Admin" : "You");
                     String timeStr = c.getCreatedTime() != null && c.getCreatedTime().length() >= 16 ? c.getCreatedTime().substring(11, 16) : "";
                     if (isStaff && c.getStaffId() != null && c.getStaffId().intValue() != lastStaffSenderId) { %>
-                        <div class="chat-staff-serve"><span>Staff - <%= senderName %> will serve you.</span></div>
+                        <div class="chat-staff-serve"><span>Sales Admin - <%= senderName %> will serve you.</span></div>
                     <% lastStaffSenderId = c.getStaffId().intValue();
                     }
                 %>
-                <div class="chat-message <%= isStaff ? "staff" : "customer" %> <%= isOwn ? "own" : "other" %>" id="message-<%= c.getIssueCommentsId() %>" data-message-id="<%= c.getIssueCommentsId() %>" data-message-sender="<%= senderName.replace("\"", "&quot;") %>" data-message-text="<%= c.getCommentText() != null ? c.getCommentText().replace("\"", "&quot;").replace("\n", " ") : "" %>">
-                    <% if (c.getReplyToCommentId() != null && c.getReplyComment() != null) { %>
-                        <div class="chat-reply-quote js-jump-reply" data-target-id="<%= c.getReplyToCommentId() %>" role="button" tabindex="0" title="Jump to replied message">
+                <div class="chat-message <%= isStaff ? "staff" : "customer" %> <%= isOwn ? "own" : "other" %>" id="message-<%= c.getIssueChatId() %>" data-message-id="<%= c.getIssueChatId() %>" data-message-sender="<%= senderName.replace("\"", "&quot;") %>" data-message-text="<%= c.getChatText() != null ? c.getChatText().replace("\"", "&quot;").replace("\n", " ") : "" %>">
+                    <% if (c.getReplyToChatId() != null && c.getReplyChatText() != null) { %>
+                        <div class="chat-reply-quote js-jump-reply" data-target-id="<%= c.getReplyToChatId() %>" role="button" tabindex="0" title="Jump to replied message">
                             <span class="reply-author">Replying to <%= c.getReplySenderName() != null ? c.getReplySenderName() : "User" %></span>
-                            <div class="reply-text"><%= c.getReplyComment() %></div>
+                            <div class="reply-text"><%= c.getReplyChatText() %></div>
                         </div>
                     <% } %>
-                    <div class="chat-text"><%= c.getCommentText() != null ? c.getCommentText().replace("\n", "<br>") : "" %></div>
+                    <div class="chat-text"><%= c.getChatText() != null ? c.getChatText().replace("\n", "<br>") : "" %></div>
                     <% if (c.getIssueAttachment() != null && !c.getIssueAttachment().isEmpty()) {
                         String attSrc = c.getIssueAttachment().startsWith("http") ? c.getIssueAttachment() : ctx + "/" + c.getIssueAttachment();
                         String ext = c.getIssueAttachment().contains(".") ? c.getIssueAttachment().substring(c.getIssueAttachment().lastIndexOf('.') + 1).toLowerCase() : "";
@@ -102,11 +102,11 @@
                     <span class="chat-time-inline"><%= timeStr %></span>
                     <div class="message-side-menu">
                         <div class="comment-menu">
-                            <button type="button" class="comment-menu-btn" onclick="toggleCommentMenu(<%= c.getIssueCommentsId() %>)" aria-label="Message options">
+                            <button type="button" class="comment-menu-btn" onclick="toggleCommentMenu(<%= c.getIssueChatId() %>)" aria-label="Message options">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
                             </button>
-                            <div class="comment-menu-dropdown" id="menu-<%= c.getIssueCommentsId() %>">
-                                <div class="comment-menu-item" onclick="setReplyTarget(<%= c.getIssueCommentsId() %>)">
+                            <div class="comment-menu-dropdown" id="menu-<%= c.getIssueChatId() %>">
+                                <div class="comment-menu-item" onclick="setReplyTarget(<%= c.getIssueChatId() %>)">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="9 17 4 12 9 7"/><path d="M20 18v-2a4 4 0 0 0-4-4H4"/></svg>
                                     Reply
                                 </div>
@@ -114,7 +114,7 @@
                                     <form method="post" action="<%= ctx %>/tickets/detail" class="comment-menu-form" onsubmit="return confirm('Delete this message?');">
                                         <input type="hidden" name="action" value="delete_message">
                                         <input type="hidden" name="issue_id" value="<%= issue.getIssueId() %>">
-                                        <input type="hidden" name="message_id" value="<%= c.getIssueCommentsId() %>">
+                                        <input type="hidden" name="message_id" value="<%= c.getIssueChatId() %>">
                                         <button type="submit" class="comment-menu-item delete">
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
                                             Delete

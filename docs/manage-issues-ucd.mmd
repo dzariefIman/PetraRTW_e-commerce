@@ -1,0 +1,60 @@
+classDiagram
+    direction TB
+
+    class ManageIssuesPage {
+        <<view>>
+        +displayComplaintForm()
+        +displayIssueList()
+        +displayIssueDetails()
+        +displayStatus()
+        +displayConversation()
+    }
+
+    class IssueController {
+        +submitComplaint()
+        +getIssueList()
+        +getIssue()
+        +replyIssue()
+        +updateStatus()
+    }
+
+    class IssueModeller {
+        +createIssue()
+        +updateIssueStatus()
+        +saveReply()
+        +retrieveIssue()
+        +retrieveIssueList()
+    }
+
+    class ISSUE {
+        -int issueId
+        -int ticketNum
+        -int custId
+        -int purchaseId
+        -String orderNum
+        -String title
+        -String issueDesc
+        -String productImage
+        -String status
+        -String closedTime
+        -String createdTime
+        -int staffId
+        -String lastUpdate
+    }
+
+    class ISSUE_CHAT {
+        -int issueChatId
+        -int issueId
+        -int staffId
+        -int custId
+        -String chatText
+        -String createdTime
+        -String issueAttachment
+        -String updatedTime
+        -int replyToChatId
+    }
+
+    IssueController --> IssueModeller
+    IssueModeller --> ISSUE
+    IssueModeller --> ISSUE_CHAT
+    ManageIssuesPage --> IssueController

@@ -11,7 +11,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Petra — Login</title>
     <style>
-        body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:#faf9f6;font-family:system-ui,Segoe UI,Arial,sans-serif}
+        body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background-color:#f7f5f0;font-family:system-ui,Segoe UI,Arial,sans-serif}
+        body::before{content:"";position:fixed;inset:0;background-image:url('<%= request.getContextPath() %>/assets/login-bg.jpg');background-size:cover;background-position:center;opacity:0.65;z-index:-1;pointer-events:none;filter:brightness(.98)}
         .login-box{width:100%;max-width:360px;padding:clamp(16px,2.5vw,24px);border-radius:8px;border:1px solid #eee;background:#fff;position:relative;z-index:1}
         .login-box h2{margin:0 0 12px;font-size:20px;text-align:center;color:#333}
         .msg{color:#a33;text-align:center;margin-top:8px;font-size:14px}

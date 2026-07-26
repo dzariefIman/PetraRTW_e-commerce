@@ -14,16 +14,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
-import petra.dao.IssueCommentDAO;
+import petra.dao.IssueChatDAO;
 import petra.dao.IssueDAO;
 import petra.model.Issue;
-import petra.model.IssueComment;
+import petra.model.IssueChat;
 
 @javax.servlet.annotation.MultipartConfig
 public class TicketServlet extends HttpServlet {
 
     private IssueDAO issueDAO = new IssueDAO();
-    private IssueCommentDAO commentDAO = new IssueCommentDAO();
+    private IssueChatDAO chatDAO = new IssueChatDAO();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -47,9 +47,9 @@ public class TicketServlet extends HttpServlet {
                     resp.sendRedirect(req.getContextPath() + "/tickets");
                     return;
                 }
-                List<IssueComment> comments = commentDAO.findByIssueId(id);
+                List<IssueChat> chats = chatDAO.findByIssueId(id);
                 req.setAttribute("issue", issue);
-                req.setAttribute("comments", comments);
+                req.setAttribute("chats", chats);
                 req.getRequestDispatcher("/WEB-INF/jsp/customer/ticketDetail.jsp").forward(req, resp);
             } catch (SQLException e) {
                 throw new ServletException(e);
@@ -134,7 +134,7 @@ public class TicketServlet extends HttpServlet {
                 try { replyTo = Integer.parseInt(replyToStr); } catch (Exception e) {}
                 if (replyTo != null && replyTo <= 0) replyTo = null;
 
-                commentDAO.addMessage(issueId, null, comment.trim(), attachmentPath, replyTo);
+                chatDAO.addMessage(issueId, null, comment.trim(), attachmentPath, replyTo);
                 resp.sendRedirect(req.getContextPath() + "/tickets/detail?id=" + issueId);
             } catch (SQLException e) {
                 throw new ServletException(e);
@@ -145,7 +145,7 @@ public class TicketServlet extends HttpServlet {
             int issueId = 0;
             try { issueId = Integer.parseInt(req.getParameter("issue_id")); } catch (Exception e) {}
             try {
-                commentDAO.deleteMessage(messageId, issueId);
+                chatDAO.deleteMessage(messageId, issueId);
                 resp.sendRedirect(req.getContextPath() + "/tickets/detail?id=" + issueId + "&msg=Message deleted");
             } catch (SQLException e) {
                 throw new ServletException(e);

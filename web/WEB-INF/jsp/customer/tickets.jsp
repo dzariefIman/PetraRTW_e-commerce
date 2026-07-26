@@ -74,7 +74,7 @@
                         String openDate = t.getCreatedTime() != null && t.getCreatedTime().length() >= 16 ? t.getCreatedTime().substring(0, 16) : (t.getCreatedTime() != null ? t.getCreatedTime() : "");
                         String lastUpd = t.getLastUpdate() != null && t.getLastUpdate().length() >= 16 ? t.getLastUpdate().substring(0, 16) : (t.getLastUpdate() != null ? t.getLastUpdate() : "");
                 %>
-                    <tr>
+                    <tr onclick="location.href='<%= ctx %>/tickets/detail?id=<%= t.getIssueId() %>'" style="cursor:pointer;">
                         <td>
                             <a href="<%= ctx %>/tickets/detail?id=<%= t.getIssueId() %>" style="color:#5a3913;font-weight:600;text-decoration:none;"><%= t.getTitle() %></a>
                             <small class="text-muted" style="display:block;">Ticket #<%= t.getTicketNum() != null ? t.getTicketNum() : t.getIssueId() %></small>

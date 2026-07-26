@@ -3,10 +3,10 @@ package petra.model;
 import java.math.BigDecimal;
 
 public class Product {
-    private int shopProductId;
-    private String shopProductTitle;
-    private BigDecimal shopProductPrice;
-    private String shopProductDesc;
+    private int productId;
+    private String productTitle;
+    private BigDecimal productPrice;
+    private String productDesc;
     private String productImage;
     private String createdTime;
     private String collection;
@@ -18,14 +18,14 @@ public class Product {
     private Integer advertisementId;
 
     public Product() {}
-    public int getShopProductId() { return shopProductId; }
-    public void setShopProductId(int shopProductId) { this.shopProductId = shopProductId; }
-    public String getShopProductTitle() { return shopProductTitle; }
-    public void setShopProductTitle(String shopProductTitle) { this.shopProductTitle = shopProductTitle; }
-    public BigDecimal getShopProductPrice() { return shopProductPrice; }
-    public void setShopProductPrice(BigDecimal shopProductPrice) { this.shopProductPrice = shopProductPrice; }
-    public String getShopProductDesc() { return shopProductDesc; }
-    public void setShopProductDesc(String shopProductDesc) { this.shopProductDesc = shopProductDesc; }
+    public int getProductId() { return productId; }
+    public void setProductId(int productId) { this.productId = productId; }
+    public String getProductTitle() { return productTitle; }
+    public void setProductTitle(String productTitle) { this.productTitle = productTitle; }
+    public BigDecimal getProductPrice() { return productPrice; }
+    public void setProductPrice(BigDecimal productPrice) { this.productPrice = productPrice; }
+    public String getProductDesc() { return productDesc; }
+    public void setProductDesc(String productDesc) { this.productDesc = productDesc; }
     public String getProductImage() { return productImage; }
     public void setProductImage(String productImage) { this.productImage = productImage; }
     public String getCreatedTime() { return createdTime; }

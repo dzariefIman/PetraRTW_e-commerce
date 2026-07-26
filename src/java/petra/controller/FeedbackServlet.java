@@ -13,15 +13,15 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import petra.dao.FeedbackDAO;
-import petra.dao.PurchaseDAO;
+import petra.dao.OrderDAO;
 import petra.model.Feedback;
-import petra.model.Purchase;
+import petra.model.Order;
 
 @javax.servlet.annotation.MultipartConfig
 public class FeedbackServlet extends HttpServlet {
 
     private FeedbackDAO feedbackDAO = new FeedbackDAO();
-    private PurchaseDAO purchaseDAO = new PurchaseDAO();
+    private OrderDAO orderDAO = new OrderDAO();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -42,21 +42,21 @@ public class FeedbackServlet extends HttpServlet {
             }
         }
 
-        String purchaseIdStr = req.getParameter("purchase_id");
+        String orderIdStr = req.getParameter("purchase_id");
 
-        if (purchaseIdStr == null || purchaseIdStr.trim().isEmpty()) {
+        if (orderIdStr == null || orderIdStr.trim().isEmpty()) {
             resp.sendRedirect(req.getContextPath() + "/purchases");
             return;
         }
 
         try {
-            int purchaseId = Integer.parseInt(purchaseIdStr.trim());
-            Purchase item = purchaseDAO.findById(purchaseId);
+            int orderId = Integer.parseInt(orderIdStr.trim());
+            Order item = orderDAO.findById(orderId);
             if (item == null || item.getCustId() != customerId) {
                 resp.sendRedirect(req.getContextPath() + "/purchases");
                 return;
             }
-            Feedback existing = feedbackDAO.findByCustAndPurchase(customerId, purchaseId);
+            Feedback existing = feedbackDAO.findByCustAndOrder(customerId, orderId);
             req.setAttribute("selectedPurchase", item);
             if (existing != null) {
                 req.setAttribute("existingFeedback", existing);
@@ -97,29 +97,29 @@ public class FeedbackServlet extends HttpServlet {
             e.printStackTrace();
         }
 
-        int purchaseId = 0;
-        try { purchaseId = Integer.parseInt(req.getParameter("purchase_id")); } catch (Exception e) {}
+        int orderId = 0;
+        try { orderId = Integer.parseInt(req.getParameter("purchase_id")); } catch (Exception e) {}
         int rating = 0;
         try { rating = Integer.parseInt(req.getParameter("rating")); } catch (Exception e) {}
         String feedbackText = req.getParameter("feedback_text");
 
-        if (purchaseId == 0 || rating < 1 || rating > 5 || feedbackText == null || feedbackText.trim().isEmpty()) {
+        if (orderId == 0 || rating < 1 || rating > 5 || feedbackText == null || feedbackText.trim().isEmpty()) {
             req.setAttribute("error", "Please select a product, rating (1-5 stars), and your feedback.");
             doGet(req, resp);
             return;
         }
 
         try {
-            Purchase item = purchaseDAO.findById(purchaseId);
+            Order item = orderDAO.findById(orderId);
             if (item == null) {
                 req.setAttribute("error", "Invalid product selection.");
                 doGet(req, resp);
                 return;
             }
 
-            Feedback existing = feedbackDAO.findByCustAndPurchase(customerId, purchaseId);
+            Feedback existing = feedbackDAO.findByCustAndOrder(customerId, orderId);
             if (existing != null) {
-                existing.setProductName((item.getProductTitle() != null && !item.getProductTitle().isEmpty() ? item.getProductTitle() : item.getPurchaseDesc()));
+                existing.setProductName((item.getProductTitle() != null && !item.getProductTitle().isEmpty() ? item.getProductTitle() : item.getItemDesc()));
                 existing.setOrderNum(item.getOrderNum());
                 existing.setRating(rating);
                 existing.setFeedbackText(feedbackText.trim());
@@ -131,8 +131,8 @@ public class FeedbackServlet extends HttpServlet {
             } else {
                 Feedback fb = new Feedback();
                 fb.setCustId(customerId);
-                fb.setPurchaseId(purchaseId);
-                fb.setProductName((item.getProductTitle() != null && !item.getProductTitle().isEmpty() ? item.getProductTitle() : item.getPurchaseDesc()));
+                fb.setOrderId(orderId);
+                fb.setProductName((item.getProductTitle() != null && !item.getProductTitle().isEmpty() ? item.getProductTitle() : item.getItemDesc()));
                 fb.setOrderNum(item.getOrderNum());
                 fb.setRating(rating);
                 fb.setFeedbackText(feedbackText.trim());

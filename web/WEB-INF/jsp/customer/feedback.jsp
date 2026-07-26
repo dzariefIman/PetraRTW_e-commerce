@@ -1,10 +1,10 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="java.util.*, petra.model.Purchase, petra.model.Feedback" %>
+<%@page import="java.util.*, petra.model.Order, petra.model.Feedback" %>
 <%
     request.setAttribute("pageTitle", "Give Feedback");
     request.setAttribute("activePage", "purchases");
     String error = (String) request.getAttribute("error");
-    Purchase selectedPurchase = (Purchase) request.getAttribute("selectedPurchase");
+    Order selectedPurchase = (Order) request.getAttribute("selectedPurchase");
     Feedback existingFeedback = (Feedback) request.getAttribute("existingFeedback");
     String ctx = request.getContextPath();
 %>
@@ -19,10 +19,10 @@
         <div class="form-group">
             <label>Product</label>
             <div style="padding:10px 12px;border:1px solid #e6e0da;border-radius:6px;background:#f9f8f6;color:#333;">
-                <%= selectedPurchase.getProductTitle() != null && !selectedPurchase.getProductTitle().isEmpty() ? selectedPurchase.getProductTitle() : selectedPurchase.getPurchaseDesc() %><%= selectedPurchase.getSize() != null && !selectedPurchase.getSize().isEmpty() ? " (" + selectedPurchase.getSize() + ")" : "" %>
+                <%= selectedPurchase.getProductTitle() != null && !selectedPurchase.getProductTitle().isEmpty() ? selectedPurchase.getProductTitle() : selectedPurchase.getItemDesc() %><%= selectedPurchase.getSize() != null && !selectedPurchase.getSize().isEmpty() ? " (" + selectedPurchase.getSize() + ")" : "" %>
                 <div style="font-size:12px;color:#888;margin-top:2px;">Order #<%= selectedPurchase.getOrderNum() %></div>
             </div>
-            <input type="hidden" name="purchase_id" value="<%= selectedPurchase.getPurchaseId() %>">
+            <input type="hidden" name="purchase_id" value="<%= selectedPurchase.getOrderId() %>">
         </div>
 
         <div class="form-group">

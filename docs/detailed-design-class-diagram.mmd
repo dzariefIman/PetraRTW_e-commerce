@@ -1,0 +1,840 @@
+classDiagram
+    direction TB
+
+    %% ============================================
+    %% ENTITY / MODEL CLASSES
+    %% ============================================
+
+    class Customer {
+        -int custId
+        -String custName
+        -String username
+        -String password
+        -String custEmail
+        -String custAddress
+        -String custPhoneNum
+        +getCustId() int
+        +setCustId(int) void
+        +getCustName() String
+        +setCustName(String) void
+        +getUsername() String
+        +setUsername(String) void
+        +getPassword() String
+        +setPassword(String) void
+        +getCustEmail() String
+        +setCustEmail(String) void
+        +getCustAddress() String
+        +setCustAddress(String) void
+        +getCustPhoneNum() String
+        +setCustPhoneNum(String) void
+    }
+
+    class SalesAdmin {
+        -int staffId
+        -String staffName
+        -String username
+        -String password
+        -String staffEmail
+        -String staffAddress
+        -String staffPhoneNum
+        -String profilePicture
+        +getStaffId() int
+        +setStaffId(int) void
+        +getStaffName() String
+        +setStaffName(String) void
+        +getUsername() String
+        +setUsername(String) void
+        +getPassword() String
+        +setPassword(String) void
+        +getStaffEmail() String
+        +setStaffEmail(String) void
+        +getStaffAddress() String
+        +setStaffAddress(String) void
+        +getStaffPhoneNum() String
+        +setStaffPhoneNum(String) void
+        +getProfilePicture() String
+        +setProfilePicture(String) void
+    }
+
+    class Product {
+        -int productId
+        -String productTitle
+        -BigDecimal productPrice
+        -String productDesc
+        -String productImage
+        -String createdTime
+        -String collection
+        -int sizeS
+        -int sizeM
+        -int sizeL
+        -int sizeXL
+        -String itemType
+        -Integer advertisementId
+        +getProductId() int
+        +setProductId(int) void
+        +getProductTitle() String
+        +setProductTitle(String) void
+        +getProductPrice() BigDecimal
+        +setProductPrice(BigDecimal) void
+        +getProductDesc() String
+        +setProductDesc(String) void
+        +getProductImage() String
+        +setProductImage(String) void
+        +getCreatedTime() String
+        +setCreatedTime(String) void
+        +getCollection() String
+        +setCollection(String) void
+        +getSizeS() int
+        +setSizeS(int) void
+        +getSizeM() int
+        +setSizeM(int) void
+        +getSizeL() int
+        +setSizeL(int) void
+        +getSizeXL() int
+        +setSizeXL(int) void
+        +getItemType() String
+        +setItemType(String) void
+        +getAdvertisementId() Integer
+        +setAdvertisementId(Integer) void
+        +getTotalStock() int
+        +getStockForSize(String) int
+    }
+
+    class Cart {
+        -int cartId
+        -int custId
+        -int productId
+        -String title
+        -BigDecimal price
+        -String productImage
+        -String size
+        -int quantity
+        -int stock
+        +getCartId() int
+        +setCartId(int) void
+        +getCustId() int
+        +setCustId(int) void
+        +getProductId() int
+        +setProductId(int) void
+        +getTitle() String
+        +setTitle(String) void
+        +getPrice() BigDecimal
+        +setPrice(BigDecimal) void
+        +getProductImage() String
+        +setProductImage(String) void
+        +getSize() String
+        +setSize(String) void
+        +getQuantity() int
+        +setQuantity(int) void
+        +getStock() int
+        +setStock(int) void
+        +isOutOfStock() boolean
+        +exceedsStock() boolean
+        +getSubtotal() BigDecimal
+    }
+
+    class Purchase {
+        -int purchaseId
+        -int custId
+        -String orderNum
+        -String paymentMethod
+        -String purchaseDesc
+        -String size
+        -int quantity
+        -BigDecimal itemSubTotal
+        -BigDecimal shippingFee
+        -BigDecimal voucherAmount
+        -BigDecimal totalPrice
+        -String productImage
+        -String createdTime
+        -Integer productId
+        -String customerName
+        -String customerPhone
+        -int totalQty
+        -int itemCount
+        -String firstItemDesc
+        -String firstSize
+        -String productTitle
+        +getPurchaseId() int
+        +setPurchaseId(int) void
+        +getCustId() int
+        +setCustId(int) void
+        +getOrderNum() String
+        +setOrderNum(String) void
+        +getPaymentMethod() String
+        +setPaymentMethod(String) void
+        +getPurchaseDesc() String
+        +setPurchaseDesc(String) void
+        +getSize() String
+        +setSize(String) void
+        +getQuantity() int
+        +setQuantity(int) void
+        +getItemSubTotal() BigDecimal
+        +setItemSubTotal(BigDecimal) void
+        +getShippingFee() BigDecimal
+        +setShippingFee(BigDecimal) void
+        +getVoucherAmount() BigDecimal
+        +setVoucherAmount(BigDecimal) void
+        +getTotalPrice() BigDecimal
+        +setTotalPrice(BigDecimal) void
+        +getProductImage() String
+        +setProductImage(String) void
+        +getCreatedTime() String
+        +setCreatedTime(String) void
+        +getProductId() Integer
+        +setProductId(Integer) void
+        +getCustomerName() String
+        +setCustomerName(String) void
+        +getCustomerPhone() String
+        +setCustomerPhone(String) void
+        +getTotalQty() int
+        +setTotalQty(int) void
+        +getItemCount() int
+        +setItemCount(int) void
+        +getFirstItemDesc() String
+        +setFirstItemDesc(String) void
+        +getFirstSize() String
+        +setFirstSize(String) void
+        +getProductTitle() String
+        +setProductTitle(String) void
+    }
+
+    class Promotion {
+        -int adsId
+        -String adsTitle
+        -String adsDesc
+        -String productImage
+        -Integer productId
+        -String startDate
+        -String endDate
+        -String status
+        -String createdTime
+        -String updatedTime
+        -String collection
+        -Integer staffId
+        +getAdsId() int
+        +setAdsId(int) void
+        +getAdsTitle() String
+        +setAdsTitle(String) void
+        +getAdsDesc() String
+        +setAdsDesc(String) void
+        +getProductImage() String
+        +setProductImage(String) void
+        +getProductId() Integer
+        +setProductId(Integer) void
+        +getStartDate() String
+        +setStartDate(String) void
+        +getEndDate() String
+        +setEndDate(String) void
+        +getStatus() String
+        +setStatus(String) void
+        +getCreatedTime() String
+        +setCreatedTime(String) void
+        +getUpdatedTime() String
+        +setUpdatedTime(String) void
+        +getCollection() String
+        +setCollection(String) void
+        +getStaffId() Integer
+        +setStaffId(Integer) void
+    }
+
+    class Issue {
+        -int issueId
+        -Integer ticketNum
+        -Integer custId
+        -Integer purchaseId
+        -String orderNum
+        -String title
+        -String issueDesc
+        -String productImage
+        -String status
+        -String closedTime
+        -String createdTime
+        -Integer staffId
+        -String customerName
+        -String customerPhone
+        -String customerEmail
+        -String itemDescription
+        -String lastUpdate
+        +getIssueId() int
+        +setIssueId(int) void
+        +getTicketNum() Integer
+        +setTicketNum(Integer) void
+        +getCustId() Integer
+        +setCustId(Integer) void
+        +getPurchaseId() Integer
+        +setPurchaseId(Integer) void
+        +getOrderNum() String
+        +setOrderNum(String) void
+        +getTitle() String
+        +setTitle(String) void
+        +getIssueDesc() String
+        +setIssueDesc(String) void
+        +getProductImage() String
+        +setProductImage(String) void
+        +getStatus() String
+        +setStatus(String) void
+        +getClosedTime() String
+        +setClosedTime(String) void
+        +getCreatedTime() String
+        +setCreatedTime(String) void
+        +getLastUpdate() String
+        +setLastUpdate(String) void
+        +getStaffId() Integer
+        +setStaffId(Integer) void
+        +getCustomerName() String
+        +setCustomerName(String) void
+        +getCustomerPhone() String
+        +setCustomerPhone(String) void
+        +getCustomerEmail() String
+        +setCustomerEmail(String) void
+        +getItemDescription() String
+        +setItemDescription(String) void
+        +getDescription() String
+        +setDescription(String) void
+        +getImagePath() String
+        +setImagePath(String) void
+    }
+
+    class IssueChat {
+        -int issueChatId
+        -int issueId
+        -Integer staffId
+        -Integer custId
+        -String chatText
+        -String createdTime
+        -String issueAttachment
+        -String updatedTime
+        -Integer replyToChatId
+        -String senderName
+        -String senderRole
+        -String replyChatText
+        -String replySenderName
+        -String replySenderRole
+        +getIssueChatId() int
+        +setIssueChatId(int) void
+        +getIssueId() int
+        +setIssueId(int) void
+        +getStaffId() Integer
+        +setStaffId(Integer) void
+        +getCustId() Integer
+        +setCustId(Integer) void
+        +getChatText() String
+        +setChatText(String) void
+        +getCreatedTime() String
+        +setCreatedTime(String) void
+        +getIssueAttachment() String
+        +setIssueAttachment(String) void
+        +getUpdatedTime() String
+        +setUpdatedTime(String) void
+        +getReplyToChatId() Integer
+        +setReplyToChatId(Integer) void
+        +getSenderName() String
+        +setSenderName(String) void
+        +getSenderRole() String
+        +setSenderRole(String) void
+        +getReplyChatText() String
+        +setReplyChatText(String) void
+        +getReplySenderName() String
+        +setReplySenderName(String) void
+        +getReplySenderRole() String
+        +setReplySenderRole(String) void
+    }
+
+    class Feedback {
+        -int feedbackId
+        -int custId
+        -String feedbackText
+        -String productImage
+        -String status
+        -String createdTime
+        -String orderNum
+        -int rating
+        -Integer purchaseId
+        -String productName
+        -String customerName
+        +getFeedbackId() int
+        +setFeedbackId(int) void
+        +getCustId() int
+        +setCustId(int) void
+        +getFeedbackText() String
+        +setFeedbackText(String) void
+        +getProductImage() String
+        +setProductImage(String) void
+        +getStatus() String
+        +setStatus(String) void
+        +getCreatedTime() String
+        +setCreatedTime(String) void
+        +getOrderNum() String
+        +setOrderNum(String) void
+        +getRating() int
+        +setRating(int) void
+        +getPurchaseId() Integer
+        +setPurchaseId(Integer) void
+        +getProductName() String
+        +setProductName(String) void
+        +getCustomerName() String
+        +setCustomerName(String) void
+    }
+
+    %% ============================================
+    %% DAO CLASSES
+    %% ============================================
+
+    class CustomerDAO {
+        +findById(int) Customer
+        +findByUsername(String) Customer
+        +findByEmail(String) Customer
+        +authenticate(String, String) Customer
+        +insert(Customer) boolean
+        +findAll() List~Customer~
+        +countWithFilters(String, String, String) int
+        +findAllWithFilters(String, String, String, int, int) List~Customer~
+        -map(ResultSet) Customer
+    }
+
+    class SalesAdminDAO {
+        +findById(int) SalesAdmin
+        +findByUsername(String) SalesAdmin
+        +findByEmail(String) SalesAdmin
+        +authenticate(String, String) SalesAdmin
+        +update(SalesAdmin, boolean, String) boolean
+        -map(ResultSet) SalesAdmin
+    }
+
+    class ProductDAO {
+        +findById(int) Product
+        +findByGroup(String) List~Product~
+        +findAllCollections() List~String~
+        +findUncategorized() List~Product~
+        +findAll() List~Product~
+        +countAll(String, String) int
+        +findAllPaged(int, int, String, String) List~Product~
+        +findByTitle(String) Product
+        +insert(Product) boolean
+        +update(Product) boolean
+        +delete(int) boolean
+        -map(ResultSet) Product
+    }
+
+    class CartDAO {
+        +findByCustId(int) List~Cart~
+        +findExisting(int, int, String) Cart
+        +addItem(int, int, String, int) void
+        +updateQuantity(int, int) void
+        +removeItem(int) void
+        +clearCart(int) void
+        +getItemCount(int) int
+        -mapRow(ResultSet) Cart
+    }
+
+    class PurchaseDAO {
+        +findById(int) Purchase
+        +findByCustId(int) List~Purchase~
+        +findOrdersByCustId(int, String) List~Purchase~
+        +findItemsByOrderNum(String, int) List~Purchase~
+        +findOrderSummary(String, int) Purchase
+        +createOrder(int, String, List~Cart~) int
+        +findAll() List~Purchase~
+        +search(String) List~Purchase~
+        +findByOrderNum(String) List~Purchase~
+        +findOrderSummaries(int, int, String, String) List~Purchase~
+        +countOrderSummaries(String, String) int
+        -map(ResultSet) Purchase
+    }
+
+    class PromotionDAO {
+        +findByStatus(String) List~Promotion~
+        +findByStatusWithLimit(String, int) List~Promotion~
+        +findById(int) Promotion
+        +findAll() List~Promotion~
+        +insert(Promotion) boolean
+        +update(Promotion) boolean
+        +delete(int) boolean
+        -map(ResultSet) Promotion
+    }
+
+    class IssueDAO {
+        +findById(int) Issue
+        +findByIdAndCustId(int, int) Issue
+        +hasIssueForPurchase(int, int) boolean
+        +findByCustId(int) List~Issue~
+        +findByCustIdWithFilters(int, String, String) List~Issue~
+        +create(Issue) int
+        +findAllWithFilters(String, String, String, int, int) List~Issue~
+        +countAllWithFilters(String, String, String) int
+        +updateStatus(int, String) boolean
+        -map(ResultSet) Issue
+    }
+
+    class IssueChatDAO {
+        +findByIssueId(int) List~IssueChat~
+        +addMessage(int, Integer, String, String, Integer) int
+        +deleteMessage(int, int) boolean
+        -map(ResultSet) IssueChat
+    }
+
+    class FeedbackDAO {
+        +findById(int) Feedback
+        +findByCustAndPurchase(int, int) Feedback
+        +findByCustAndOrder(int, String) Feedback
+        +hasFeedback(int, int) boolean
+        +hasFeedbackForOrder(int, String) boolean
+        +findByCustId(int) List~Feedback~
+        +findRecent(int) List~Feedback~
+        +findAll() List~Feedback~
+        +search(String) List~Feedback~
+        +create(Feedback) boolean
+        +update(Feedback) boolean
+        +countAll() int
+        +findAllPaginated(int, int) List~Feedback~
+        -map(ResultSet) Feedback
+    }
+
+    %% ============================================
+    %% CONTROLLER / SERVLET CLASSES
+    %% ============================================
+
+    class AuthServlet {
+        -CustomerDAO customerDAO
+        -SalesAdminDAO salesAdminDAO
+        +doGet(HttpServletRequest, HttpServletResponse) void
+        +doPost(HttpServletRequest, HttpServletResponse) void
+        -handleLogin(HttpServletRequest, HttpServletResponse) void
+        -handleRegister(HttpServletRequest, HttpServletResponse) void
+    }
+
+    class HomeServlet {
+        -ProductDAO productDAO
+        +doGet(HttpServletRequest, HttpServletResponse) void
+    }
+
+    class ProductDetailServlet {
+        -ProductDAO productDAO
+        +doGet(HttpServletRequest, HttpServletResponse) void
+    }
+
+    class CartServlet {
+        -CartDAO cartDAO
+        -ProductDAO productDAO
+        +doGet(HttpServletRequest, HttpServletResponse) void
+        +doPost(HttpServletRequest, HttpServletResponse) void
+        -parseInt(String) int
+    }
+
+    class CheckoutServlet {
+        -CartDAO cartDAO
+        -PurchaseDAO purchaseDAO
+        +doGet(HttpServletRequest, HttpServletResponse) void
+        +doPost(HttpServletRequest, HttpServletResponse) void
+    }
+
+    class PurchaseServlet {
+        -PurchaseDAO purchaseDAO
+        -FeedbackDAO feedbackDAO
+        -IssueDAO issueDAO
+        +doGet(HttpServletRequest, HttpServletResponse) void
+    }
+
+    class ReceiptServlet {
+        -PurchaseDAO purchaseDAO
+        +doGet(HttpServletRequest, HttpServletResponse) void
+        -buildReceiptHtml(String, Purchase, List, BigDecimal, BigDecimal, BigDecimal, BigDecimal, int) String
+        -escHtml(String) String
+    }
+
+    class PromotionServlet {
+        -PromotionDAO promotionDAO
+        -FeedbackDAO feedbackDAO
+        +doGet(HttpServletRequest, HttpServletResponse) void
+    }
+
+    class TicketServlet {
+        -IssueDAO issueDAO
+        -IssueChatDAO chatDAO
+        +doGet(HttpServletRequest, HttpServletResponse) void
+        +doPost(HttpServletRequest, HttpServletResponse) void
+    }
+
+    class ComplaintServlet {
+        -IssueDAO issueDAO
+        -PurchaseDAO purchaseDAO
+        +doGet(HttpServletRequest, HttpServletResponse) void
+        +doPost(HttpServletRequest, HttpServletResponse) void
+    }
+
+    class FeedbackServlet {
+        -FeedbackDAO feedbackDAO
+        -PurchaseDAO purchaseDAO
+        +doGet(HttpServletRequest, HttpServletResponse) void
+        +doPost(HttpServletRequest, HttpServletResponse) void
+    }
+
+    class SalesAdminDashboardServlet {
+        -SalesAdminDAO salesAdminDAO
+        +doGet(HttpServletRequest, HttpServletResponse) void
+        +doPost(HttpServletRequest, HttpServletResponse) void
+    }
+
+    class SalesAdminProductServlet {
+        -ProductDAO productDAO
+        +doGet(HttpServletRequest, HttpServletResponse) void
+        +doPost(HttpServletRequest, HttpServletResponse) void
+        -handleAdd(HttpServletRequest, HttpServletResponse) void
+        -handleEdit(HttpServletRequest, HttpServletResponse) void
+        -handleDelete(HttpServletRequest, HttpServletResponse) void
+        -validateProduct(String, BigDecimal, Integer) void
+        -handleFileUpload(HttpServletRequest, String) String
+    }
+
+    class SalesAdminPromotionServlet {
+        -PromotionDAO promotionDAO
+        -ProductDAO productDAO
+        +doGet(HttpServletRequest, HttpServletResponse) void
+        +doPost(HttpServletRequest, HttpServletResponse) void
+        -handleAdd(HttpServletRequest, HttpServletResponse) void
+        -handleEdit(HttpServletRequest, HttpServletResponse, int) void
+        -handlePublish(HttpServletRequest, HttpServletResponse, int) void
+        -handleFileUpload(HttpServletRequest) String
+    }
+
+    class SalesAdminCustomerServlet {
+        -CustomerDAO customerDAO
+        +doGet(HttpServletRequest, HttpServletResponse) void
+    }
+
+    class SalesAdminPurchaseServlet {
+        -PurchaseDAO purchaseDAO
+        +doGet(HttpServletRequest, HttpServletResponse) void
+    }
+
+    class SalesAdminIssueServlet {
+        -IssueDAO issueDAO
+        +doGet(HttpServletRequest, HttpServletResponse) void
+    }
+
+    class SalesAdminIssueDetailServlet {
+        -IssueDAO issueDAO
+        -IssueChatDAO chatDAO
+        +doGet(HttpServletRequest, HttpServletResponse) void
+        +doPost(HttpServletRequest, HttpServletResponse) void
+    }
+
+    class SalesAdminFeedbackServlet {
+        -FeedbackDAO feedbackDAO
+        +doGet(HttpServletRequest, HttpServletResponse) void
+    }
+
+    %% ============================================
+    %% UTILITY CLASSES
+    %% ============================================
+
+    class DBConnection {
+        +getConnection() Connection
+    }
+
+    class PasswordUtil {
+        +hash(String) String
+        +verify(String, String) boolean
+    }
+
+    class AuthFilter {
+        +init(FilterConfig) void
+        +doFilter(ServletRequest, ServletResponse, FilterChain) void
+        +destroy() void
+    }
+
+    %% ============================================
+    %% VIEW (JSP) CLASSES
+    %% ============================================
+
+    class loginjsp {
+        <<view>>
+    }
+    class homejsp {
+        <<view>>
+    }
+    class homeSalesjsp {
+        <<view>>
+    }
+    class productDetailjsp {
+        <<view>>
+    }
+    class cartjsp {
+        <<view>>
+    }
+    class checkoutjsp {
+        <<view>>
+    }
+    class purchasesjsp {
+        <<view>>
+    }
+    class purchaseDetailjsp {
+        <<view>>
+    }
+    class promotionsjsp {
+        <<view>>
+    }
+    class ticketsjsp {
+        <<view>>
+    }
+    class ticketDetailjsp {
+        <<view>>
+    }
+    class complaintjsp {
+        <<view>>
+    }
+    class feedbackjsp {
+        <<view>>
+    }
+    class myFeedbacksjsp {
+        <<view>>
+    }
+    class dashboardjsp {
+        <<view>>
+    }
+    class productsjsp {
+        <<view>>
+    }
+    class salesAdminPromotionsjsp {
+        <<view>>
+    }
+    class customersjsp {
+        <<view>>
+    }
+    class purchaseHistoryjsp {
+        <<view>>
+    }
+    class purchaseDetailAdminjsp {
+        <<view>>
+    }
+    class issuesjsp {
+        <<view>>
+    }
+    class issueDetailjsp {
+        <<view>>
+    }
+    class feedbackAdminjsp {
+        <<view>>
+    }
+
+    %% ============================================
+    %% ENTITY-TO-ENTITY RELATIONSHIPS
+    %% ============================================
+
+    Customer "1" --> "*" Cart
+    Customer "1" --> "*" Purchase
+    Customer "1" --> "*" Issue
+    Customer "1" --> "*" Feedback
+
+    Product "1" --> "*" Cart
+    Product "1" --> "*" Purchase
+    Product "1" --> "*" Promotion
+
+    SalesAdmin "1" --> "*" Promotion
+    SalesAdmin "1" --> "*" Issue
+
+    Issue "1" --> "*" IssueChat
+    Purchase "1" --> "*" Issue
+    Purchase "1" --> "*" Feedback
+
+    %% ============================================
+    %% DAO-TO-ENTITY RELATIONSHIPS
+    %% ============================================
+
+    CustomerDAO ..> Customer
+    SalesAdminDAO ..> SalesAdmin
+    ProductDAO ..> Product
+    CartDAO ..> Cart
+    CartDAO ..> Product
+    PurchaseDAO ..> Purchase
+    PurchaseDAO ..> Cart
+    PromotionDAO ..> Promotion
+    IssueDAO ..> Issue
+    IssueChatDAO ..> IssueChat
+    FeedbackDAO ..> Feedback
+
+    %% ============================================
+    %% CONTROLLER-TO-DAO RELATIONSHIPS
+    %% ============================================
+
+    AuthServlet --> CustomerDAO
+    AuthServlet --> SalesAdminDAO
+    HomeServlet --> ProductDAO
+    ProductDetailServlet --> ProductDAO
+    CartServlet --> CartDAO
+    CartServlet --> ProductDAO
+    CheckoutServlet --> CartDAO
+    CheckoutServlet --> PurchaseDAO
+    PurchaseServlet --> PurchaseDAO
+    PurchaseServlet --> FeedbackDAO
+    PurchaseServlet --> IssueDAO
+    ReceiptServlet --> PurchaseDAO
+    PromotionServlet --> PromotionDAO
+    PromotionServlet --> FeedbackDAO
+    TicketServlet --> IssueDAO
+    TicketServlet --> IssueChatDAO
+    ComplaintServlet --> IssueDAO
+    ComplaintServlet --> PurchaseDAO
+    FeedbackServlet --> FeedbackDAO
+    FeedbackServlet --> PurchaseDAO
+    SalesAdminDashboardServlet --> SalesAdminDAO
+    SalesAdminProductServlet --> ProductDAO
+    SalesAdminPromotionServlet --> PromotionDAO
+    SalesAdminPromotionServlet --> ProductDAO
+    SalesAdminCustomerServlet --> CustomerDAO
+    SalesAdminPurchaseServlet --> PurchaseDAO
+    SalesAdminIssueServlet --> IssueDAO
+    SalesAdminIssueDetailServlet --> IssueDAO
+    SalesAdminIssueDetailServlet --> IssueChatDAO
+    SalesAdminFeedbackServlet --> FeedbackDAO
+
+    %% ============================================
+    %% CONTROLLER-TO-VIEW (JSP FORWARD) RELATIONSHIPS
+    %% ============================================
+
+    AuthServlet ..> loginjsp
+    HomeServlet ..> homejsp
+    HomeServlet ..> homeSalesjsp
+    ProductDetailServlet ..> productDetailjsp
+    CartServlet ..> cartjsp
+    CheckoutServlet ..> checkoutjsp
+    PurchaseServlet ..> purchasesjsp
+    PurchaseServlet ..> purchaseDetailjsp
+    ReceiptServlet ..> receiptHtml
+    PromotionServlet ..> promotionsjsp
+    TicketServlet ..> ticketsjsp
+    TicketServlet ..> ticketDetailjsp
+    ComplaintServlet ..> complaintjsp
+    FeedbackServlet ..> feedbackjsp
+    FeedbackServlet ..> myFeedbacksjsp
+    SalesAdminDashboardServlet ..> dashboardjsp
+    SalesAdminProductServlet ..> productsjsp
+    SalesAdminPromotionServlet ..> salesAdminPromotionsjsp
+    SalesAdminCustomerServlet ..> customersjsp
+    SalesAdminPurchaseServlet ..> purchaseHistoryjsp
+    SalesAdminPurchaseServlet ..> purchaseDetailAdminjsp
+    SalesAdminIssueServlet ..> issuesjsp
+    SalesAdminIssueDetailServlet ..> issueDetailjsp
+    SalesAdminFeedbackServlet ..> feedbackAdminjsp
+
+    class receiptHtml {
+        <<view>>
+    }
+
+    %% ============================================
+    %% UTILITY DEPENDENCIES
+    %% ============================================
+
+    CustomerDAO --> DBConnection
+    CustomerDAO --> PasswordUtil
+    SalesAdminDAO --> DBConnection
+    SalesAdminDAO --> PasswordUtil
+    ProductDAO --> DBConnection
+    CartDAO --> DBConnection
+    PurchaseDAO --> DBConnection
+    PromotionDAO --> DBConnection
+    IssueDAO --> DBConnection
+    IssueChatDAO --> DBConnection
+    FeedbackDAO --> DBConnection
+    AuthFilter --> PasswordUtil

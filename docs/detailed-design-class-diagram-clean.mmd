@@ -1,0 +1,443 @@
+classDiagram
+    direction TB
+
+    %% ============================================
+    %% ENTITY / MODEL CLASSES
+    %% ============================================
+
+    class Customer {
+        -int custId
+        -String custName
+        -String username
+        -String password
+        -String custEmail
+        -String custAddress
+        -String custPhoneNum
+    }
+
+    class SalesAdmin {
+        -int staffId
+        -String staffName
+        -String username
+        -String password
+        -String staffEmail
+        -String staffAddress
+        -String staffPhoneNum
+        -String profilePicture
+    }
+
+    class Product {
+        -int productId
+        -String productTitle
+        -BigDecimal productPrice
+        -String productDesc
+        -String productImage
+        -String createdTime
+        -String collection
+        -int sizeS
+        -int sizeM
+        -int sizeL
+        -int sizeXL
+        -String itemType
+        -Integer advertisementId
+        +getTotalStock() int
+        +getStockForSize(String) int
+    }
+
+    class Cart {
+        -int cartId
+        -int custId
+        -int productId
+        -String title
+        -BigDecimal price
+        -String productImage
+        -String size
+        -int quantity
+        -int stock
+        +isOutOfStock() boolean
+        +getSubtotal() BigDecimal
+    }
+
+    class Purchase {
+        -int purchaseId
+        -int custId
+        -String orderNum
+        -String paymentMethod
+        -String purchaseDesc
+        -String size
+        -int quantity
+        -BigDecimal itemSubTotal
+        -BigDecimal shippingFee
+        -BigDecimal voucherAmount
+        -BigDecimal totalPrice
+        -String productImage
+        -String createdTime
+        -Integer productId
+        -String customerName
+        -String customerPhone
+        -int totalQty
+        -int itemCount
+        -String productTitle
+    }
+
+    class Promotion {
+        -int adsId
+        -String adsTitle
+        -String adsDesc
+        -String productImage
+        -Integer productId
+        -String startDate
+        -String endDate
+        -String status
+        -String createdTime
+        -String updatedTime
+        -String collection
+        -Integer staffId
+    }
+
+    class Issue {
+        -int issueId
+        -Integer ticketNum
+        -Integer custId
+        -Integer purchaseId
+        -String orderNum
+        -String title
+        -String issueDesc
+        -String productImage
+        -String status
+        -String closedTime
+        -String createdTime
+        -Integer staffId
+        -String customerName
+        -String lastUpdate
+    }
+
+    class IssueChat {
+        -int issueChatId
+        -int issueId
+        -Integer staffId
+        -Integer custId
+        -String chatText
+        -String createdTime
+        -String issueAttachment
+        -String updatedTime
+        -Integer replyToChatId
+        -String senderName
+        -String senderRole
+    }
+
+    class Feedback {
+        -int feedbackId
+        -int custId
+        -String feedbackText
+        -String productImage
+        -String status
+        -String createdTime
+        -String orderNum
+        -int rating
+        -Integer purchaseId
+        -String productName
+        -String customerName
+    }
+
+    %% ============================================
+    %% DATA ACCESS OBJECT (DAO) CLASSES
+    %% ============================================
+
+    class CustomerDAO {
+        +findById(int) Customer
+        +findByUsername(String) Customer
+        +findByEmail(String) Customer
+        +authenticate(String, String) Customer
+        +insert(Customer) boolean
+        +findAll() List~Customer~
+        +countWithFilters(String, String, String) int
+        +findAllWithFilters(String, String, String, int, int) List~Customer~
+    }
+
+    class SalesAdminDAO {
+        +findById(int) SalesAdmin
+        +findByUsername(String) SalesAdmin
+        +authenticate(String, String) SalesAdmin
+        +update(SalesAdmin, boolean, String) boolean
+    }
+
+    class ProductDAO {
+        +findById(int) Product
+        +findByGroup(String) List~Product~
+        +findAllCollections() List~String~
+        +findUncategorized() List~Product~
+        +findAll() List~Product~
+        +countAll(String, String) int
+        +findAllPaged(int, int, String, String) List~Product~
+        +findByTitle(String) Product
+        +insert(Product) boolean
+        +update(Product) boolean
+        +delete(int) boolean
+    }
+
+    class CartDAO {
+        +findByCustId(int) List~Cart~
+        +findExisting(int, int, String) Cart
+        +addItem(int, int, String, int) void
+        +updateQuantity(int, int) void
+        +removeItem(int) void
+        +clearCart(int) void
+        +getItemCount(int) int
+    }
+
+    class PurchaseDAO {
+        +findById(int) Purchase
+        +findByCustId(int) List~Purchase~
+        +findOrdersByCustId(int, String) List~Purchase~
+        +findItemsByOrderNum(String, int) List~Purchase~
+        +findOrderSummary(String, int) Purchase
+        +createOrder(int, String, List~Cart~) int
+        +findAll() List~Purchase~
+        +search(String) List~Purchase~
+        +findByOrderNum(String) List~Purchase~
+        +findOrderSummaries(int, int, String, String) List~Purchase~
+        +countOrderSummaries(String, String) int
+    }
+
+    class PromotionDAO {
+        +findByStatus(String) List~Promotion~
+        +findByStatusWithLimit(String, int) List~Promotion~
+        +findById(int) Promotion
+        +findAll() List~Promotion~
+        +insert(Promotion) boolean
+        +update(Promotion) boolean
+        +delete(int) boolean
+    }
+
+    class IssueDAO {
+        +findById(int) Issue
+        +findByIdAndCustId(int, int) Issue
+        +hasIssueForPurchase(int, int) boolean
+        +findByCustId(int) List~Issue~
+        +findByCustIdWithFilters(int, String, String) List~Issue~
+        +create(Issue) int
+        +findAllWithFilters(String, String, String, int, int) List~Issue~
+        +countAllWithFilters(String, String, String) int
+        +updateStatus(int, String) boolean
+    }
+
+    class IssueChatDAO {
+        +findByIssueId(int) List~IssueChat~
+        +addMessage(int, Integer, String, String, Integer) int
+        +deleteMessage(int, int) boolean
+    }
+
+    class FeedbackDAO {
+        +findById(int) Feedback
+        +findByCustAndPurchase(int, int) Feedback
+        +findByCustAndOrder(String, int) Feedback
+        +hasFeedback(int, int) boolean
+        +findByCustId(int) List~Feedback~
+        +findRecent(int) List~Feedback~
+        +findAll() List~Feedback~
+        +search(String) List~Feedback~
+        +create(Feedback) boolean
+        +update(Feedback) boolean
+        +countAll() int
+        +findAllPaginated(int, int) List~Feedback~
+    }
+
+    %% ============================================
+    %% CONTROLLER / SERVLET CLASSES
+    %% ============================================
+
+    class AuthServlet {
+        -CustomerDAO customerDAO
+        -SalesAdminDAO salesAdminDAO
+        +doGet(req, resp) void
+        +doPost(req, resp) void
+        -handleLogin(req, resp) void
+        -handleRegister(req, resp) void
+    }
+
+    class HomeServlet {
+        -ProductDAO productDAO
+        +doGet(req, resp) void
+    }
+
+    class ProductDetailServlet {
+        -ProductDAO productDAO
+        +doGet(req, resp) void
+    }
+
+    class CartServlet {
+        -CartDAO cartDAO
+        -ProductDAO productDAO
+        +doGet(req, resp) void
+        +doPost(req, resp) void
+    }
+
+    class CheckoutServlet {
+        +doGet(req, resp) void
+        +doPost(req, resp) void
+    }
+
+    class PurchaseServlet {
+        +doGet(req, resp) void
+    }
+
+    class ReceiptServlet {
+        -PurchaseDAO purchaseDAO
+        +doGet(req, resp) void
+        -buildReceiptHtml(...) String
+    }
+
+    class PromotionServlet {
+        +doGet(req, resp) void
+    }
+
+    class TicketServlet {
+        +doGet(req, resp) void
+    }
+
+    class ComplaintServlet {
+        +doGet(req, resp) void
+        +doPost(req, resp) void
+    }
+
+    class FeedbackServlet {
+        +doGet(req, resp) void
+        +doPost(req, resp) void
+    }
+
+    class SalesAdminDashboardServlet {
+        -SalesAdminDAO salesAdminDAO
+        +doGet(req, resp) void
+        +doPost(req, resp) void
+    }
+
+    class SalesAdminProductServlet {
+        -ProductDAO productDAO
+        +doGet(req, resp) void
+        +doPost(req, resp) void
+        -handleAdd(req, resp) void
+        -handleEdit(req, resp) void
+        -handleDelete(req, resp) void
+        -handleFileUpload(req, String) String
+    }
+
+    class SalesAdminPromotionServlet {
+        -PromotionDAO promotionDAO
+        -ProductDAO productDAO
+        +doGet(req, resp) void
+        +doPost(req, resp) void
+        -handleAdd(req, resp) void
+        -handleEdit(req, resp, int) void
+        -handlePublish(req, resp, int) void
+        -handleFileUpload(req) String
+    }
+
+    class SalesAdminCustomerServlet {
+        -CustomerDAO customerDAO
+        +doGet(req, resp) void
+    }
+
+    class SalesAdminPurchaseServlet {
+        +doGet(req, resp) void
+    }
+
+    class SalesAdminIssueServlet {
+        +doGet(req, resp) void
+    }
+
+    class SalesAdminIssueDetailServlet {
+        -IssueDAO issueDAO
+        -IssueChatDAO chatDAO
+        +doGet(req, resp) void
+        +doPost(req, resp) void
+    }
+
+    class SalesAdminFeedbackServlet {
+        -FeedbackDAO feedbackDAO
+        +doGet(req, resp) void
+    }
+
+    %% ============================================
+    %% UTILITY CLASSES
+    %% ============================================
+
+    class DBConnection {
+        +getConnection() Connection__
+    }
+
+    class PasswordUtil {
+        +hash(String) String
+        +verify(String, String) boolean
+    }
+
+    class AuthFilter {
+        +init(FilterConfig) void
+        +doFilter(req, resp, FilterChain) void
+        +destroy() void
+    }
+
+    %% ============================================
+    %% RELATIONSHIPS
+    %% ============================================
+
+    %% Entity-to-Entity (FK-based)
+    Customer "1" --> "*" Cart : cust_id
+    Customer "1" --> "*" Purchase : cust_id
+    Customer "1" --> "*" Issue : cust_id
+    Customer "1" --> "*" Feedback : cust_id
+
+    Product "1" --> "*" Cart : product_id
+    Product "1" --> "*" Purchase : product_id
+    Product "1" --> "*" Promotion : product_id
+
+    SalesAdmin "1" --> "*" Promotion : staff_id
+    SalesAdmin "1" --> "*" Issue : staff_id
+
+    Issue "1" --> "*" IssueChat : issue_id
+    Purchase "1" --> "*" Issue : purchase_id
+    Purchase "1" --> "*" Feedback : purchase_id
+
+    %% DAO-to-Entity
+    CustomerDAO ..> Customer
+    SalesAdminDAO ..> SalesAdmin
+    ProductDAO ..> Product
+    CartDAO ..> Cart
+    CartDAO ..> Product : JOIN query
+    PurchaseDAO ..> Purchase
+    PurchaseDAO ..> Cart : createOrder()
+    PromotionDAO ..> Promotion
+    IssueDAO ..> Issue
+    IssueChatDAO ..> IssueChat
+    FeedbackDAO ..> Feedback
+
+    %% Controller-to-DAO
+    AuthServlet --> CustomerDAO
+    AuthServlet --> SalesAdminDAO
+    HomeServlet --> ProductDAO
+    ProductDetailServlet --> ProductDAO
+    CartServlet --> CartDAO
+    CartServlet --> ProductDAO
+    ReceiptServlet --> PurchaseDAO
+    SalesAdminDashboardServlet --> SalesAdminDAO
+    SalesAdminProductServlet --> ProductDAO
+    SalesAdminPromotionServlet --> PromotionDAO
+    SalesAdminPromotionServlet --> ProductDAO
+    SalesAdminCustomerServlet --> CustomerDAO
+    SalesAdminIssueDetailServlet --> IssueDAO
+    SalesAdminIssueDetailServlet --> IssueChatDAO
+    SalesAdminFeedbackServlet --> FeedbackDAO
+
+    %% Utility dependencies
+    CustomerDAO --> DBConnection
+    CustomerDAO --> PasswordUtil
+    SalesAdminDAO --> DBConnection
+    SalesAdminDAO --> PasswordUtil
+    ProductDAO --> DBConnection
+    CartDAO --> DBConnection
+    PurchaseDAO --> DBConnection
+    PromotionDAO --> DBConnection
+    IssueDAO --> DBConnection
+    IssueChatDAO --> DBConnection
+    FeedbackDAO --> DBConnection
+    AuthFilter --> PasswordUtil

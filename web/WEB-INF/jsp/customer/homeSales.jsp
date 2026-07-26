@@ -34,11 +34,11 @@
                             <% } %>
                             <span style="position:absolute;bottom:6px;left:6px;background:rgba(211,47,47,0.9);color:#fff;padding:2px 8px;border-radius:8px;font-size:11px;font-weight:600">Out of Stock</span>
                         </div>
-                        <div style="font-weight:700"><%= p.getShopProductTitle() %></div>
-                        <div style="color:#666;font-size:14px">RM <%= String.format("%.2f", p.getShopProductPrice()) %></div>
+                        <div style="font-weight:700"><%= p.getProductTitle() %></div>
+                        <div style="color:#666;font-size:14px">RM <%= String.format("%.2f", p.getProductPrice()) %></div>
                     </div>
                 <% } else { %>
-                    <a href="<%= ctx %>/product?id=<%= p.getShopProductId() %>" style="text-decoration:none;color:inherit;background:#fff;border:1px solid #eee;border-radius:0.375rem;padding:0.75rem;display:flex;flex-direction:column;gap:0.5rem;transition:box-shadow .2s">
+                    <a href="<%= ctx %>/product?id=<%= p.getProductId() %>" style="text-decoration:none;color:inherit;background:#fff;border:1px solid #eee;border-radius:0.375rem;padding:0.75rem;display:flex;flex-direction:column;gap:0.5rem;transition:box-shadow .2s">
                         <div style="height:13.75rem;display:flex;align-items:center;justify-content:center;background:#fafafa;overflow:hidden;border-radius:0.25rem">
                             <% if (p.getProductImage() != null && !p.getProductImage().isEmpty()) { %>
                                 <img src="<%= ctx + "/" + p.getProductImage() %>" alt="" style="max-width:100%;max-height:100%;object-fit:contain">
@@ -46,8 +46,8 @@
                                 <div style="color:#999">No image</div>
                             <% } %>
                         </div>
-                        <div style="font-weight:700"><%= p.getShopProductTitle() %></div>
-                        <div style="color:#666;font-size:14px">RM <%= String.format("%.2f", p.getShopProductPrice()) %></div>
+                        <div style="font-weight:700"><%= p.getProductTitle() %></div>
+                        <div style="color:#666;font-size:14px">RM <%= String.format("%.2f", p.getProductPrice()) %></div>
                     </a>
                 <% } %>
             <% } %>

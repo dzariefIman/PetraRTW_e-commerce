@@ -82,15 +82,15 @@ public class CustomerDAO {
         StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM customers WHERE 1=1");
         List<Object> params = new ArrayList<Object>();
         if (searchId != null && !searchId.trim().isEmpty()) {
-            sql.append(" AND CAST(cust_id AS VARCHAR(20)) LIKE ?");
-            params.add("%" + searchId.trim() + "%");
+            String idStr = searchId.trim().toUpperCase().replace("CUST", "");
+            try { int id = Integer.parseInt(idStr); sql.append(" AND cust_id = ?"); params.add(id); } catch (NumberFormatException e) {}
         }
         if (searchName != null && !searchName.trim().isEmpty()) {
-            sql.append(" AND cust_name LIKE ?");
+            sql.append(" AND UPPER(cust_name) LIKE UPPER(?)");
             params.add("%" + searchName.trim() + "%");
         }
         if (searchEmail != null && !searchEmail.trim().isEmpty()) {
-            sql.append(" AND cust_email LIKE ?");
+            sql.append(" AND UPPER(cust_email) LIKE UPPER(?)");
             params.add("%" + searchEmail.trim() + "%");
         }
         try (Connection conn = DBConnection.getConnection();
@@ -105,15 +105,15 @@ public class CustomerDAO {
         StringBuilder sql = new StringBuilder("SELECT * FROM customers WHERE 1=1");
         List<Object> params = new ArrayList<Object>();
         if (searchId != null && !searchId.trim().isEmpty()) {
-            sql.append(" AND CAST(cust_id AS VARCHAR(20)) LIKE ?");
-            params.add("%" + searchId.trim() + "%");
+            String idStr = searchId.trim().toUpperCase().replace("CUST", "");
+            try { int id = Integer.parseInt(idStr); sql.append(" AND cust_id = ?"); params.add(id); } catch (NumberFormatException e) {}
         }
         if (searchName != null && !searchName.trim().isEmpty()) {
-            sql.append(" AND cust_name LIKE ?");
+            sql.append(" AND UPPER(cust_name) LIKE UPPER(?)");
             params.add("%" + searchName.trim() + "%");
         }
         if (searchEmail != null && !searchEmail.trim().isEmpty()) {
-            sql.append(" AND cust_email LIKE ?");
+            sql.append(" AND UPPER(cust_email) LIKE UPPER(?)");
             params.add("%" + searchEmail.trim() + "%");
         }
         sql.append(" ORDER BY cust_id");

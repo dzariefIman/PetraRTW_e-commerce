@@ -34,10 +34,10 @@ public class AuthFilter implements Filter {
             return;
         }
 
-        boolean isCustomerPath = path.startsWith("/staff");
-        boolean isStaffRequest = "staff".equals(role);
+        boolean isSalesAdminPath = path.startsWith("/salesAdmin");
+        boolean isSalesAdminRequest = "salesAdmin".equals(role);
 
-        if (isCustomerPath && !isStaffRequest) {
+        if (isSalesAdminPath && !isSalesAdminRequest) {
             resp.sendRedirect(req.getContextPath() + "/home");
             return;
         }

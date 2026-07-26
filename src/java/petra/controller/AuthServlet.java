@@ -8,14 +8,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import petra.dao.CustomerDAO;
-import petra.dao.StaffDAO;
+import petra.dao.SalesAdminDAO;
 import petra.model.Customer;
-import petra.model.Staff;
+import petra.model.SalesAdmin;
 
 public class AuthServlet extends HttpServlet {
 
     private CustomerDAO customerDAO = new CustomerDAO();
-    private StaffDAO staffDAO = new StaffDAO();
+    private SalesAdminDAO salesAdminDAO = new SalesAdminDAO();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -54,7 +54,7 @@ public class AuthServlet extends HttpServlet {
         String role = req.getParameter("role");
         String username = req.getParameter("username");
         String password = req.getParameter("password");
-        boolean isStaff = "staff".equals(role);
+        boolean isSalesAdmin = "staff".equals(role);
 
         if (username == null || password == null || username.isEmpty() || password.isEmpty()) {
             req.setAttribute("error", "Missing fields");
@@ -63,14 +63,14 @@ public class AuthServlet extends HttpServlet {
         }
 
         try {
-            if (isStaff) {
-                Staff staff = staffDAO.authenticate(username, password);
-                if (staff != null) {
+            if (isSalesAdmin) {
+                SalesAdmin salesAdmin = salesAdminDAO.authenticate(username, password);
+                if (salesAdmin != null) {
                     HttpSession session = req.getSession();
-                    session.setAttribute("userId", staff.getStaffId());
-                    session.setAttribute("username", staff.getUsername());
-                    session.setAttribute("userRole", "staff");
-                    resp.sendRedirect(req.getContextPath() + "/staff/home");
+                    session.setAttribute("userId", salesAdmin.getStaffId());
+                    session.setAttribute("username", salesAdmin.getUsername());
+                    session.setAttribute("userRole", "salesAdmin");
+                    resp.sendRedirect(req.getContextPath() + "/salesAdmin/home");
                 } else {
                     req.setAttribute("error", "Invalid credentials");
                     req.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(req, resp);

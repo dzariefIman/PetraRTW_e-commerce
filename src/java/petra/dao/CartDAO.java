@@ -3,21 +3,21 @@ package petra.dao;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import petra.model.CartDBItem;
+import petra.model.Cart;
 import petra.model.Product;
 import petra.util.DBConnection;
 
 public class CartDAO {
 
-    public List<CartDBItem> findByCustId(int custId) throws SQLException {
-        String sql = "SELECT c.cart_id, c.cust_id, c.shop_product_id, c.size, c.quantity, "
-                   + "p.shop_product_title, p.shop_product_price, p.product_image, "
+    public List<Cart> findByCustId(int custId) throws SQLException {
+        String sql = "SELECT c.cart_id, c.cust_id, c.product_id, c.size, c.quantity, "
+                   + "p.product_title, p.product_price, p.product_image, "
                    + "p.size_s, p.size_m, p.size_l, p.size_xl "
                    + "FROM cart c "
-                   + "JOIN shop_products p ON c.shop_product_id = p.shop_product_id "
+                   + "JOIN products p ON c.product_id = p.product_id "
                    + "WHERE c.cust_id = ? "
                    + "ORDER BY c.created_time";
-        List<CartDBItem> items = new ArrayList<CartDBItem>();
+        List<Cart> items = new ArrayList<Cart>();
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, custId);
@@ -30,13 +30,13 @@ public class CartDAO {
         return items;
     }
 
-    public CartDBItem findExisting(int custId, int productId, String size) throws SQLException {
-        String sql = "SELECT c.cart_id, c.cust_id, c.shop_product_id, c.size, c.quantity, "
-                   + "p.shop_product_title, p.shop_product_price, p.product_image, "
+    public Cart findExisting(int custId, int productId, String size) throws SQLException {
+        String sql = "SELECT c.cart_id, c.cust_id, c.product_id, c.size, c.quantity, "
+                   + "p.product_title, p.product_price, p.product_image, "
                    + "p.size_s, p.size_m, p.size_l, p.size_xl "
                    + "FROM cart c "
-                   + "JOIN shop_products p ON c.shop_product_id = p.shop_product_id "
-                   + "WHERE c.cust_id = ? AND c.shop_product_id = ? AND c.size = ?";
+                   + "JOIN products p ON c.product_id = p.product_id "
+                   + "WHERE c.cust_id = ? AND c.product_id = ? AND c.size = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, custId);
@@ -50,11 +50,11 @@ public class CartDAO {
     }
 
     public void addItem(int custId, int productId, String size, int quantity) throws SQLException {
-        CartDBItem existing = findExisting(custId, productId, size);
+        Cart existing = findExisting(custId, productId, size);
         if (existing != null) {
             updateQuantity(existing.getCartId(), existing.getQuantity() + quantity);
         } else {
-            String sql = "INSERT INTO cart (cust_id, shop_product_id, size, quantity) VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO cart (cust_id, product_id, size, quantity) VALUES (?, ?, ?, ?)";
             try (Connection conn = DBConnection.getConnection();
                  PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setInt(1, custId);
@@ -94,6 +94,20 @@ public class CartDAO {
         }
     }
 
+    public void rePopulateCart(int custId, List<int[]> itemData) throws SQLException {
+        String sql = "INSERT INTO cart (cust_id, product_id, size, quantity) VALUES (?, ?, ?, ?)";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            for (int[] item : itemData) {
+                ps.setInt(1, custId);
+                ps.setInt(2, item[0]);
+                ps.setString(3, item.length > 2 ? (item[2] == 0 ? "S" : item[2] == 1 ? "M" : item[2] == 2 ? "L" : "XL") : "M");
+                ps.setInt(4, item[1]);
+                ps.executeUpdate();
+            }
+        }
+    }
+
     public int getItemCount(int custId) throws SQLException {
         String sql = "SELECT COALESCE(SUM(quantity), 0) FROM cart WHERE cust_id = ?";
         try (Connection conn = DBConnection.getConnection();
@@ -106,15 +120,15 @@ public class CartDAO {
         return 0;
     }
 
-    private CartDBItem mapRow(ResultSet rs) throws SQLException {
-        CartDBItem item = new CartDBItem();
+    private Cart mapRow(ResultSet rs) throws SQLException {
+        Cart item = new Cart();
         item.setCartId(rs.getInt("cart_id"));
         item.setCustId(rs.getInt("cust_id"));
-        item.setShopProductId(rs.getInt("shop_product_id"));
+        item.setProductId(rs.getInt("product_id"));
         item.setSize(rs.getString("size"));
         item.setQuantity(rs.getInt("quantity"));
-        item.setTitle(rs.getString("shop_product_title"));
-        item.setPrice(rs.getBigDecimal("shop_product_price"));
+        item.setTitle(rs.getString("product_title"));
+        item.setPrice(rs.getBigDecimal("product_price"));
         item.setProductImage(rs.getString("product_image"));
         String sz = item.getSize();
         int stock = 0;

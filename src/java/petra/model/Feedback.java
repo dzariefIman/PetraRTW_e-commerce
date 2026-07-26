@@ -9,7 +9,7 @@ public class Feedback {
     private String createdTime;
     private String orderNum;
     private int rating;
-    private Integer purchaseId;
+    private Integer orderId;
     private String productName;
     private String customerName;
 
@@ -30,8 +30,8 @@ public class Feedback {
     public void setOrderNum(String orderNum) { this.orderNum = orderNum; }
     public int getRating() { return rating; }
     public void setRating(int rating) { this.rating = rating; }
-    public Integer getPurchaseId() { return purchaseId; }
-    public void setPurchaseId(Integer purchaseId) { this.purchaseId = purchaseId; }
+    public Integer getOrderId() { return orderId; }
+    public void setOrderId(Integer orderId) { this.orderId = orderId; }
     public String getProductName() { return productName; }
     public void setProductName(String productName) { this.productName = productName; }
     public String getCustomerName() { return customerName; }

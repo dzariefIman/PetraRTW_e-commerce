@@ -13,10 +13,10 @@ import petra.util.DBConnection;
 public class IssueDAO {
 
     public Issue findById(int id) throws SQLException {
-        String sql = "SELECT i.*, c.cust_name AS customer_name, c.cust_phone_num AS customer_phone, c.cust_email AS customer_email, p.purchase_desc AS item_description, "
+        String sql = "SELECT i.*, c.cust_name AS customer_name, c.cust_phone_num AS customer_phone, c.cust_email AS customer_email, o.item_desc AS item_description, "
                    + "COALESCE(lu.last_update, i.created_time) AS last_update "
-                   + "FROM issues i LEFT JOIN customers c ON i.cust_id = c.cust_id LEFT JOIN purchases p ON i.purchase_id = p.purchase_id "
-                   + "LEFT JOIN (SELECT issue_id, MAX(created_time) AS last_update FROM issue_comments GROUP BY issue_id) lu ON lu.issue_id = i.issue_id WHERE i.issue_id = ?";
+                   + "FROM issues i LEFT JOIN customers c ON i.cust_id = c.cust_id LEFT JOIN orders oi ON i.order_id = o.order_id "
+                   + "LEFT JOIN (SELECT issue_id, MAX(created_time) AS last_update FROM issue_chat GROUP BY issue_id) lu ON lu.issue_id = i.issue_id WHERE i.issue_id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
@@ -33,11 +33,11 @@ public class IssueDAO {
         }
     }
 
-    public boolean hasIssueForPurchase(int custId, int purchaseId) throws SQLException {
-        String sql = "SELECT COUNT(*) FROM issues WHERE cust_id = ? AND purchase_id = ?";
+    public boolean hasIssueForOrder(int custId, int orderId) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM issues WHERE cust_id = ? AND order_id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, custId); ps.setInt(2, purchaseId);
+            ps.setInt(1, custId); ps.setInt(2, orderId);
             try (ResultSet rs = ps.executeQuery()) { rs.next(); return rs.getInt(1) > 0; }
         }
     }
@@ -46,7 +46,7 @@ public class IssueDAO {
         List<Issue> list = new ArrayList<Issue>();
         String sql = "SELECT i.*, COALESCE(lu.last_update, i.created_time) AS last_update "
             + "FROM issues i "
-            + "LEFT JOIN (SELECT issue_id, MAX(created_time) AS last_update FROM issue_comments GROUP BY issue_id) lu ON lu.issue_id = i.issue_id "
+            + "LEFT JOIN (SELECT issue_id, MAX(created_time) AS last_update FROM issue_chat GROUP BY issue_id) lu ON lu.issue_id = i.issue_id "
             + "WHERE i.cust_id = ? ORDER BY i.created_time DESC";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -60,15 +60,19 @@ public class IssueDAO {
         List<Issue> list = new ArrayList<Issue>();
         StringBuilder sql = new StringBuilder("SELECT i.*, COALESCE(lu.last_update, i.created_time) AS last_update "
             + "FROM issues i "
-            + "LEFT JOIN (SELECT issue_id, MAX(created_time) AS last_update FROM issue_comments GROUP BY issue_id) lu ON lu.issue_id = i.issue_id "
+            + "LEFT JOIN (SELECT issue_id, MAX(created_time) AS last_update FROM issue_chat GROUP BY issue_id) lu ON lu.issue_id = i.issue_id "
             + "WHERE i.cust_id = ?");
-        if (ticketNum != null && !ticketNum.isEmpty()) sql.append(" AND CAST(i.ticket_num AS VARCHAR(20)) LIKE ?");
+        if (ticketNum != null && !ticketNum.isEmpty()) {
+            try { int tn = Integer.parseInt(ticketNum.trim()); sql.append(" AND i.ticket_num = ?"); } catch (NumberFormatException e) {}
+        }
         if (status != null && !status.isEmpty()) sql.append(" AND i.status = ?");
         sql.append(" ORDER BY i.created_time DESC");
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql.toString())) {
             int idx = 1; ps.setInt(idx++, custId);
-            if (ticketNum != null && !ticketNum.isEmpty()) ps.setString(idx++, "%" + ticketNum + "%");
+            if (ticketNum != null && !ticketNum.isEmpty()) {
+                try { int tn = Integer.parseInt(ticketNum.trim()); ps.setInt(idx++, tn); } catch (NumberFormatException e) {}
+            }
             if (status != null && !status.isEmpty()) ps.setString(idx++, status);
             try (ResultSet rs = ps.executeQuery()) { while (rs.next()) list.add(map(rs)); }
         }
@@ -76,10 +80,10 @@ public class IssueDAO {
     }
 
     public int create(Issue issue) throws SQLException {
-        String sql = "INSERT INTO issues (cust_id, purchase_id, order_num, title, issue_desc, product_image, status, created_time) VALUES (?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
+        String sql = "INSERT INTO issues (cust_id, order_id, order_num, title, issue_desc, product_image, status, created_time) VALUES (?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            ps.setInt(1, issue.getCustId()); ps.setObject(2, issue.getPurchaseId()); ps.setString(3, issue.getOrderNum());
+            ps.setInt(1, issue.getCustId()); ps.setObject(2, issue.getOrderId()); ps.setString(3, issue.getOrderNum());
             ps.setString(4, issue.getTitle()); ps.setString(5, issue.getIssueDesc()); ps.setString(6, issue.getProductImage()); ps.setString(7, "New");
             ps.executeUpdate();
             try (ResultSet keys = ps.getGeneratedKeys()) {
@@ -94,15 +98,19 @@ public class IssueDAO {
         List<Issue> list = new ArrayList<Issue>();
         StringBuilder sql = new StringBuilder("SELECT i.*, c.cust_name AS customer_name, COALESCE(lu.last_update, i.created_time) AS last_update "
             + "FROM issues i LEFT JOIN customers c ON i.cust_id = c.cust_id "
-            + "LEFT JOIN (SELECT issue_id, MAX(created_time) AS last_update FROM issue_comments GROUP BY issue_id) lu ON lu.issue_id = i.issue_id WHERE 1=1");
-        if (ticketNum != null && !ticketNum.isEmpty()) sql.append(" AND CAST(i.ticket_num AS VARCHAR(20)) LIKE ?");
+            + "LEFT JOIN (SELECT issue_id, MAX(created_time) AS last_update FROM issue_chat GROUP BY issue_id) lu ON lu.issue_id = i.issue_id WHERE 1=1");
+        boolean hasTicketFilter = false;
+        int ticketFilterVal = 0;
+        if (ticketNum != null && !ticketNum.isEmpty()) {
+            try { ticketFilterVal = Integer.parseInt(ticketNum.trim()); sql.append(" AND i.ticket_num = ?"); hasTicketFilter = true; } catch (NumberFormatException e) {}
+        }
         if (custName != null && !custName.isEmpty()) sql.append(" AND c.cust_name LIKE ?");
         if (status != null && !status.isEmpty()) sql.append(" AND i.status = ?");
         sql.append(" ORDER BY i.created_time DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql.toString())) {
             int idx = 1;
-            if (ticketNum != null && !ticketNum.isEmpty()) ps.setString(idx++, "%" + ticketNum + "%");
+            if (hasTicketFilter) ps.setInt(idx++, ticketFilterVal);
             if (custName != null && !custName.isEmpty()) ps.setString(idx++, "%" + custName + "%");
             if (status != null && !status.isEmpty()) ps.setString(idx++, status);
             ps.setInt(idx++, (page - 1) * perPage); ps.setInt(idx++, perPage);
@@ -113,13 +121,17 @@ public class IssueDAO {
 
     public int countAllWithFilters(String ticketNum, String custName, String status) throws SQLException {
         StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM issues i LEFT JOIN customers c ON i.cust_id = c.cust_id WHERE 1=1");
-        if (ticketNum != null && !ticketNum.isEmpty()) sql.append(" AND CAST(i.ticket_num AS VARCHAR(20)) LIKE ?");
+        boolean hasTicketFilter = false;
+        int ticketFilterVal = 0;
+        if (ticketNum != null && !ticketNum.isEmpty()) {
+            try { ticketFilterVal = Integer.parseInt(ticketNum.trim()); sql.append(" AND i.ticket_num = ?"); hasTicketFilter = true; } catch (NumberFormatException e) {}
+        }
         if (custName != null && !custName.isEmpty()) sql.append(" AND c.cust_name LIKE ?");
         if (status != null && !status.isEmpty()) sql.append(" AND i.status = ?");
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql.toString())) {
             int idx = 1;
-            if (ticketNum != null && !ticketNum.isEmpty()) ps.setString(idx++, "%" + ticketNum + "%");
+            if (hasTicketFilter) ps.setInt(idx++, ticketFilterVal);
             if (custName != null && !custName.isEmpty()) ps.setString(idx++, "%" + custName + "%");
             if (status != null && !status.isEmpty()) ps.setString(idx++, status);
             try (ResultSet rs = ps.executeQuery()) { return rs.next() ? rs.getInt(1) : 0; }
@@ -140,7 +152,7 @@ public class IssueDAO {
     private Issue map(ResultSet rs) throws SQLException {
         Issue i = new Issue();
         i.setIssueId(rs.getInt("issue_id")); i.setTicketNum((Integer) rs.getObject("ticket_num"));
-        i.setCustId((Integer) rs.getObject("cust_id")); i.setPurchaseId((Integer) rs.getObject("purchase_id"));
+        i.setCustId((Integer) rs.getObject("cust_id")); i.setOrderId((Integer) rs.getObject("order_id"));
         i.setOrderNum(rs.getString("order_num")); i.setTitle(rs.getString("title")); i.setIssueDesc(rs.getString("issue_desc"));
         i.setProductImage(rs.getString("product_image")); i.setStatus(rs.getString("status"));
         i.setClosedTime(rs.getString("closed_time")); i.setCreatedTime(rs.getString("created_time"));

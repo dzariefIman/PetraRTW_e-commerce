@@ -88,6 +88,26 @@
         <url-pattern>/checkout</url-pattern>
     </servlet-mapping>
 
+    <!-- Payment Gateway Servlet -->
+    <servlet>
+        <servlet-name>PaymentGatewayServlet</servlet-name>
+        <servlet-class>petra.controller.PaymentGatewayServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PaymentGatewayServlet</servlet-name>
+        <url-pattern>/payment/gateway</url-pattern>
+    </servlet-mapping>
+
+    <!-- Payment Complete Servlet -->
+    <servlet>
+        <servlet-name>PaymentCompleteServlet</servlet-name>
+        <servlet-class>petra.controller.PaymentCompleteServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PaymentCompleteServlet</servlet-name>
+        <url-pattern>/payment/complete</url-pattern>
+    </servlet-mapping>
+
     <!-- Purchase Servlet -->
     <servlet>
         <servlet-name>PurchaseServlet</servlet-name>
@@ -99,94 +119,104 @@
         <url-pattern>/purchases/detail</url-pattern>
     </servlet-mapping>
 
-    <!-- Staff Dashboard Servlet -->
+    <!-- SalesAdmin Dashboard Servlet -->
     <servlet>
-        <servlet-name>StaffDashboardServlet</servlet-name>
-        <servlet-class>petra.controller.StaffDashboardServlet</servlet-class>
+        <servlet-name>SalesAdminDashboardServlet</servlet-name>
+        <servlet-class>petra.controller.SalesAdminDashboardServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>StaffDashboardServlet</servlet-name>
-        <url-pattern>/staff/home</url-pattern>
+        <servlet-name>SalesAdminDashboardServlet</servlet-name>
+        <url-pattern>/salesAdmin/home</url-pattern>
     </servlet-mapping>
 
-    <!-- Staff Product Servlet -->
+    <!-- SalesAdmin Product Servlet -->
     <servlet>
-        <servlet-name>StaffProductServlet</servlet-name>
-        <servlet-class>petra.controller.StaffProductServlet</servlet-class>
+        <servlet-name>SalesAdminProductServlet</servlet-name>
+        <servlet-class>petra.controller.SalesAdminProductServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>StaffProductServlet</servlet-name>
-        <url-pattern>/staff/products</url-pattern>
+        <servlet-name>SalesAdminProductServlet</servlet-name>
+        <url-pattern>/salesAdmin/products</url-pattern>
     </servlet-mapping>
 
-    <!-- Staff Feedback Servlet -->
+    <!-- SalesAdmin Feedback Servlet -->
     <servlet>
-        <servlet-name>StaffFeedbackServlet</servlet-name>
-        <servlet-class>petra.controller.StaffFeedbackServlet</servlet-class>
+        <servlet-name>SalesAdminFeedbackServlet</servlet-name>
+        <servlet-class>petra.controller.SalesAdminFeedbackServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>StaffFeedbackServlet</servlet-name>
-        <url-pattern>/staff/feedback</url-pattern>
+        <servlet-name>SalesAdminFeedbackServlet</servlet-name>
+        <url-pattern>/salesAdmin/feedback</url-pattern>
     </servlet-mapping>
 
-    <!-- Staff Customer Servlet -->
+    <!-- SalesAdmin Customer Servlet -->
     <servlet>
-        <servlet-name>StaffCustomerServlet</servlet-name>
-        <servlet-class>petra.controller.StaffCustomerServlet</servlet-class>
+        <servlet-name>SalesAdminCustomerServlet</servlet-name>
+        <servlet-class>petra.controller.SalesAdminCustomerServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>StaffCustomerServlet</servlet-name>
-        <url-pattern>/staff/customers</url-pattern>
+        <servlet-name>SalesAdminCustomerServlet</servlet-name>
+        <url-pattern>/salesAdmin/customers</url-pattern>
     </servlet-mapping>
 
-    <!-- Staff Purchase Servlet -->
+    <!-- SalesAdmin Purchase Servlet -->
     <servlet>
-        <servlet-name>StaffPurchaseServlet</servlet-name>
-        <servlet-class>petra.controller.StaffPurchaseServlet</servlet-class>
+        <servlet-name>SalesAdminPurchaseServlet</servlet-name>
+        <servlet-class>petra.controller.SalesAdminPurchaseServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>StaffPurchaseServlet</servlet-name>
-        <url-pattern>/staff/purchases</url-pattern>
+        <servlet-name>SalesAdminPurchaseServlet</servlet-name>
+        <url-pattern>/salesAdmin/purchases</url-pattern>
     </servlet-mapping>
 
-    <!-- Staff Promotion Servlet -->
+    <!-- SalesAdmin Advertisement Servlet -->
     <servlet>
-        <servlet-name>StaffPromotionServlet</servlet-name>
-        <servlet-class>petra.controller.StaffPromotionServlet</servlet-class>
+        <servlet-name>SalesAdminAdvertisementServlet</servlet-name>
+        <servlet-class>petra.controller.SalesAdminAdvertisementServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>StaffPromotionServlet</servlet-name>
-        <url-pattern>/staff/promotions</url-pattern>
+        <servlet-name>SalesAdminAdvertisementServlet</servlet-name>
+        <url-pattern>/salesAdmin/advertisements</url-pattern>
     </servlet-mapping>
 
-    <!-- Staff Issue Servlet (list) -->
+    <!-- SalesAdmin Issue Servlet (list) -->
     <servlet>
-        <servlet-name>StaffIssueServlet</servlet-name>
-        <servlet-class>petra.controller.StaffIssueServlet</servlet-class>
+        <servlet-name>SalesAdminIssueServlet</servlet-name>
+        <servlet-class>petra.controller.SalesAdminIssueServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>StaffIssueServlet</servlet-name>
-        <url-pattern>/staff/issues</url-pattern>
+        <servlet-name>SalesAdminIssueServlet</servlet-name>
+        <url-pattern>/salesAdmin/issues</url-pattern>
     </servlet-mapping>
 
-    <!-- Staff Issue Detail Servlet -->
+    <!-- SalesAdmin Issue Detail Servlet -->
     <servlet>
-        <servlet-name>StaffIssueDetailServlet</servlet-name>
-        <servlet-class>petra.controller.StaffIssueDetailServlet</servlet-class>
+        <servlet-name>SalesAdminIssueDetailServlet</servlet-name>
+        <servlet-class>petra.controller.SalesAdminIssueDetailServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>StaffIssueDetailServlet</servlet-name>
-        <url-pattern>/staff/issues/detail</url-pattern>
+        <servlet-name>SalesAdminIssueDetailServlet</servlet-name>
+        <url-pattern>/salesAdmin/issues/detail</url-pattern>
     </servlet-mapping>
 
-    <!-- Promotion Servlet -->
+    <!-- Advertisement Servlet -->
     <servlet>
-        <servlet-name>PromotionServlet</servlet-name>
-        <servlet-class>petra.controller.PromotionServlet</servlet-class>
+        <servlet-name>AdvertisementServlet</servlet-name>
+        <servlet-class>petra.controller.AdvertisementServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>PromotionServlet</servlet-name>
-        <url-pattern>/promotions</url-pattern>
+        <servlet-name>AdvertisementServlet</servlet-name>
+        <url-pattern>/advertisements</url-pattern>
+    </servlet-mapping>
+
+    <!-- Receipt Servlet -->
+    <servlet>
+        <servlet-name>ReceiptServlet</servlet-name>
+        <servlet-class>petra.controller.ReceiptServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ReceiptServlet</servlet-name>
+        <url-pattern>/receipt</url-pattern>
     </servlet-mapping>
 
     <!-- Auth Filter -->
@@ -202,13 +232,15 @@
         <url-pattern>/checkout</url-pattern>
         <url-pattern>/purchases</url-pattern>
         <url-pattern>/purchases/detail</url-pattern>
-        <url-pattern>/promotions</url-pattern>
+        <url-pattern>/payment/gateway</url-pattern>
+        <url-pattern>/payment/complete</url-pattern>
+        <url-pattern>/advertisements</url-pattern>
         <url-pattern>/tickets</url-pattern>
         <url-pattern>/tickets/detail</url-pattern>
         <url-pattern>/feedback</url-pattern>
         <url-pattern>/complaint</url-pattern>
-        <url-pattern>/staff/*</url-pattern>
-        <url-pattern>/staff/feedback</url-pattern>
+        <url-pattern>/salesAdmin/*</url-pattern>
+        <url-pattern>/salesAdmin/feedback</url-pattern>
     </filter-mapping>
 
     <!-- Welcome page -->

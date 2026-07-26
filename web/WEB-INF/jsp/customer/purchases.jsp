@@ -1,10 +1,10 @@
 ﻿<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="java.util.*, petra.model.Purchase" %>
+<%@page import="java.util.*, petra.model.Order" %>
 <%
     request.setAttribute("pageTitle", "My Purchases");
     request.setAttribute("activePage", "purchases");
-    List<Purchase> purchases = (List<Purchase>) request.getAttribute("purchases");
-    if (purchases == null) purchases = new ArrayList<Purchase>();
+    List<Order> purchases = (List<Order>) request.getAttribute("purchases");
+    if (purchases == null) purchases = new ArrayList<Order>();
     String sort = (String) request.getAttribute("sort");
     if (sort == null) sort = "newest";
     String ctx = request.getContextPath();
@@ -33,11 +33,16 @@
         </div>
     <% } else { %>
         <div class="purchase-grid">
-            <% for (Purchase p : purchases) { %>
+            <% for (Order p : purchases) { %>
                 <a href="<%= ctx %>/purchases/detail?order=<%= p.getOrderNum() %>" class="purchase-card">
                     <div class="purchase-card-body">
                         <div class="purchase-card-title">Order #<%= p.getOrderNum() %></div>
-                        <div class="purchase-card-desc"><%= p.getPurchaseDesc() != null ? p.getPurchaseDesc() : "" %></div>
+                        <% if (p.getOrderStatus() != null) { %>
+                            <% String st = p.getOrderStatus(); %>
+                            <% String stColor = "PAID".equals(st) || "COMPLETED".equals(st) ? "#1b8b3b" : "CANCELLED".equals(st) ? "#d32f2f" : "AWAITING_PAYMENT".equals(st) ? "#e67e00" : "#666"; %>
+                            <div style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:0.3px;margin-bottom:4px;background:<%= stColor %>20;color:<%= stColor %>;"><%= st.replace("_", " ") %></div>
+                        <% } %>
+                        <div class="purchase-card-desc"><%= p.getFirstItemDesc() != null ? p.getFirstItemDesc() : "" %></div>
                         <div class="purchase-card-meta"><%= p.getItemCount() %> item(s) &middot; <%= p.getTotalQty() %> qty</div>
                         <div class="purchase-card-price">RM <%= String.format("%.2f", p.getTotalPrice()) %></div>
                         <div class="purchase-card-date"><%= p.getCreatedTime() %></div>

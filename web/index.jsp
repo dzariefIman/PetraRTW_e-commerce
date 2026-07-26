@@ -24,7 +24,7 @@
                 <img src="<%= request.getContextPath() %>/assets/petraIndexImage.jpg" alt="Petra">
             </div>
             <div>
-                <h1>PETRA CUSTOMER SERVICE</h1>
+                <h1>PETRA RTW E-COMMERCE SYSTEM</h1>
                 <p>Hi, our valued customers! Feel free to leave a review, share any complaints, or contact our staff if you experience any issues with our products.</p>
                 <a class="btn" href="<%= request.getContextPath() %>/login">LOGIN</a>
             </div>

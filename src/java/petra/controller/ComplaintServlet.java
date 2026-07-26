@@ -13,15 +13,15 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import petra.dao.IssueDAO;
-import petra.dao.PurchaseDAO;
+import petra.dao.OrderDAO;
 import petra.model.Issue;
-import petra.model.Purchase;
+import petra.model.Order;
 
 @javax.servlet.annotation.MultipartConfig
 public class ComplaintServlet extends HttpServlet {
 
     private IssueDAO issueDAO = new IssueDAO();
-    private PurchaseDAO purchaseDAO = new PurchaseDAO();
+    private OrderDAO orderDAO = new OrderDAO();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -30,16 +30,16 @@ public class ComplaintServlet extends HttpServlet {
         HttpSession session = req.getSession();
         int customerId = (int) session.getAttribute("userId");
 
-        String purchaseIdStr = req.getParameter("purchase_id");
+        String orderIdStr = req.getParameter("purchase_id");
 
-        if (purchaseIdStr == null || purchaseIdStr.trim().isEmpty()) {
+        if (orderIdStr == null || orderIdStr.trim().isEmpty()) {
             resp.sendRedirect(req.getContextPath() + "/purchases");
             return;
         }
 
         try {
-            int purchaseId = Integer.parseInt(purchaseIdStr.trim());
-            Purchase item = purchaseDAO.findById(purchaseId);
+            int orderId = Integer.parseInt(orderIdStr.trim());
+            Order item = orderDAO.findById(orderId);
             if (item == null || item.getCustId() != customerId) {
                 resp.sendRedirect(req.getContextPath() + "/purchases");
                 return;
@@ -74,6 +74,17 @@ public class ComplaintServlet extends HttpServlet {
                     try (java.io.InputStream is = filePart.getInputStream()) {
                         Files.copy(is, new File(saveDir, uniqueName).toPath(), StandardCopyOption.REPLACE_EXISTING);
                     }
+                    // Also save to source web/ so files survive redeploy
+                    try {
+                        String srcWebPath = appPath.replace(File.separator + "build" + File.separator + "web" + File.separator, File.separator + "web" + File.separator);
+                        String srcSavePath = srcWebPath + "uploads" + File.separator + "issues";
+                        File srcDir = new File(srcSavePath);
+                        if (!srcDir.exists()) srcDir.mkdirs();
+                        File srcFile = new File(srcSavePath + File.separator + uniqueName);
+                        if (!srcFile.exists()) {
+                            Files.copy(new File(savePath + File.separator + uniqueName).toPath(), srcFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                        }
+                    } catch (Exception e) {}
                     imagePath = "uploads/issues/" + uniqueName;
                 }
             }
@@ -81,19 +92,19 @@ public class ComplaintServlet extends HttpServlet {
             e.printStackTrace();
         }
 
-        int purchaseId = 0;
-        try { purchaseId = Integer.parseInt(req.getParameter("purchase_id")); } catch (Exception e) {}
+        int orderId = 0;
+        try { orderId = Integer.parseInt(req.getParameter("purchase_id")); } catch (Exception e) {}
         String title = req.getParameter("title");
         String description = req.getParameter("description");
 
-        if (purchaseId == 0 || title == null || title.trim().isEmpty() || description == null || description.trim().isEmpty()) {
+        if (orderId == 0 || title == null || title.trim().isEmpty() || description == null || description.trim().isEmpty()) {
             req.setAttribute("error", "Please select a product, enter a title, and description.");
             doGet(req, resp);
             return;
         }
 
         try {
-            Purchase item = purchaseDAO.findById(purchaseId);
+            Order item = orderDAO.findById(orderId);
             if (item == null) {
                 req.setAttribute("error", "Invalid product selection.");
                 doGet(req, resp);
@@ -102,7 +113,7 @@ public class ComplaintServlet extends HttpServlet {
 
             Issue issue = new Issue();
             issue.setCustId(customerId);
-            issue.setPurchaseId(purchaseId);
+            issue.setOrderId(orderId);
             issue.setOrderNum(item.getOrderNum());
             issue.setTitle(title.trim());
             issue.setIssueDesc(description.trim());

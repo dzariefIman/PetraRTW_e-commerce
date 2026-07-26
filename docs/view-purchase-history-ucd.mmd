@@ -1,0 +1,94 @@
+classDiagram
+    direction TB
+
+    class Customer {
+        -int custId
+        -String custName
+        -String username
+        -String custEmail
+        -String custAddress
+        -String custPhoneNum
+    }
+
+    class Purchase {
+        -int purchaseId
+        -int custId
+        -String orderNum
+        -String paymentMethod
+        -String purchaseDesc
+        -String size
+        -int quantity
+        -BigDecimal itemSubTotal
+        -BigDecimal shippingFee
+        -BigDecimal voucherAmount
+        -BigDecimal totalPrice
+        -String productImage
+        -String createdTime
+        -Integer productId
+        -String customerName
+        -String customerPhone
+        -int totalQty
+        -int itemCount
+        -String productTitle
+    }
+
+    class Product {
+        -int productId
+        -String productTitle
+        -BigDecimal productPrice
+        -String productDesc
+        -String productImage
+        -String collection
+        -String itemType
+    }
+
+    class PurchaseDAO {
+        +findById(int) Purchase
+        +findByCustId(int) List~Purchase~
+        +findOrdersByCustId(int, String) List~Purchase~
+        +findItemsByOrderNum(String, int) List~Purchase~
+        +findOrderSummary(String, int) Purchase
+        +findAll() List~Purchase~
+        +findByOrderNum(String) List~Purchase~
+        +findOrderSummaries(int, int, String, String) List~Purchase~
+        +countOrderSummaries(String, String) int
+    }
+
+    class PurchaseServlet {
+        -PurchaseDAO purchaseDAO
+        +doGet(req, resp) void
+    }
+
+    class SalesAdminPurchaseServlet {
+        -PurchaseDAO purchaseDAO
+        +doGet(req, resp) void
+    }
+
+    class purchasesjsp {
+        <<view>>
+    }
+
+    class purchaseDetailjsp {
+        <<view>>
+    }
+
+    class purchaseHistoryjsp {
+        <<view>>
+    }
+
+    class purchaseDetailAdminjsp {
+        <<view>>
+    }
+
+    Customer "1" --> "*" Purchase
+    Product "1" --> "*" Purchase
+
+    PurchaseDAO ..> Purchase
+
+    PurchaseServlet --> PurchaseDAO
+    SalesAdminPurchaseServlet --> PurchaseDAO
+
+    PurchaseServlet ..> purchasesjsp
+    PurchaseServlet ..> purchaseDetailjsp
+    SalesAdminPurchaseServlet ..> purchaseHistoryjsp
+    SalesAdminPurchaseServlet ..> purchaseDetailAdminjsp

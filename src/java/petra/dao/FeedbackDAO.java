@@ -20,11 +20,11 @@ public class FeedbackDAO {
         }
     }
 
-    public Feedback findByCustAndPurchase(int custId, int purchaseId) throws SQLException {
-        String sql = "SELECT * FROM feedback WHERE cust_id = ? AND purchase_id = ?";
+    public Feedback findByCustAndOrder(int custId, int orderId) throws SQLException {
+        String sql = "SELECT * FROM feedback WHERE cust_id = ? AND order_id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, custId); ps.setInt(2, purchaseId);
+            ps.setInt(1, custId); ps.setInt(2, orderId);
             try (ResultSet rs = ps.executeQuery()) { return rs.next() ? map(rs) : null; }
         }
     }
@@ -38,17 +38,17 @@ public class FeedbackDAO {
         }
     }
 
-    public boolean hasFeedback(int custId, int purchaseId) throws SQLException {
-        String sql = "SELECT COUNT(*) FROM feedback WHERE cust_id = ? AND purchase_id = ?";
+    public boolean hasFeedback(int custId, int orderId) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM feedback WHERE cust_id = ? AND order_id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, custId); ps.setInt(2, purchaseId);
+            ps.setInt(1, custId); ps.setInt(2, orderId);
             try (ResultSet rs = ps.executeQuery()) { rs.next(); return rs.getInt(1) > 0; }
         }
     }
 
     public boolean hasFeedbackForOrder(int custId, String orderNum) throws SQLException {
-        String sql = "SELECT COUNT(*) FROM feedback f JOIN purchases p ON f.purchase_id = p.purchase_id WHERE f.cust_id = ? AND p.order_num = ?";
+        String sql = "SELECT COUNT(*) FROM feedback f JOIN orders oi ON f.order_id = o.order_id WHERE f.cust_id = ? AND o.order_num = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, custId); ps.setString(2, orderNum);
@@ -99,11 +99,11 @@ public class FeedbackDAO {
     }
 
     public boolean create(Feedback f) throws SQLException {
-        String sql = "INSERT INTO feedback (cust_id, product_name, order_num, purchase_id, rating, feedback_text, product_image, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO feedback (cust_id, product_name, order_num, order_id, rating, feedback_text, product_image, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, f.getCustId()); ps.setString(2, f.getProductName()); ps.setString(3, f.getOrderNum());
-            ps.setObject(4, f.getPurchaseId()); ps.setInt(5, f.getRating()); ps.setString(6, f.getFeedbackText());
+            ps.setObject(4, f.getOrderId()); ps.setInt(5, f.getRating()); ps.setString(6, f.getFeedbackText());
             ps.setString(7, f.getProductImage()); ps.setString(8, "Published");
             return ps.executeUpdate() > 0;
         }
@@ -146,7 +146,7 @@ public class FeedbackDAO {
         f.setFeedbackText(rs.getString("feedback_text")); f.setProductImage(rs.getString("product_image"));
         f.setStatus(rs.getString("status")); f.setCreatedTime(rs.getString("created_time"));
         f.setOrderNum(rs.getString("order_num")); f.setRating(rs.getInt("rating"));
-        f.setPurchaseId((Integer) rs.getObject("purchase_id")); f.setProductName(rs.getString("product_name"));
+        f.setOrderId((Integer) rs.getObject("order_id")); f.setProductName(rs.getString("product_name"));
         try { f.setCustomerName(rs.getString("customer_name")); } catch (Exception e) {}
         return f;
     }

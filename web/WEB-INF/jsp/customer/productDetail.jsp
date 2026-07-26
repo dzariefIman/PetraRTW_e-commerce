@@ -4,9 +4,13 @@
     request.setAttribute("activePage", "home");
     Product p = (Product) request.getAttribute("product");
     String ctx = request.getContextPath();
-    request.setAttribute("pageTitle", p.getShopProductTitle());
+    request.setAttribute("pageTitle", p.getProductTitle());
 %>
 <jsp:include page="/WEB-INF/jsp/customer/_header.jsp" />
+
+<% String cartMsg = (String) session.getAttribute("cartMsg"); if (cartMsg != null) { session.removeAttribute("cartMsg"); %>
+    <div style="background:#e8f5e9;color:#2e7d32;padding:12px 16px;border-radius:8px;margin:16px 0;text-align:center;font-weight:600"><%= cartMsg %></div>
+<% } %>
 
 <a href="<%= ctx %>/home" class="back-link">&larr; Back</a>
 
@@ -14,20 +18,20 @@
     <div class="pd-images">
         <% if (p.getProductImage() != null && !p.getProductImage().isEmpty()) { %>
             <div class="pd-img-card">
-                <img src="<%= ctx + "/" + p.getProductImage() %>" alt="<%= p.getShopProductTitle() %>">
+                <img src="<%= ctx + "/" + p.getProductImage() %>" alt="<%= p.getProductTitle() %>">
             </div>
         <% } else { %>
             <div class="pd-img-card pd-placeholder">
-                <%= p.getShopProductTitle() != null && !p.getShopProductTitle().isEmpty() ? p.getShopProductTitle().substring(0, 1).toUpperCase() : "P" %>
+                <%= p.getProductTitle() != null && !p.getProductTitle().isEmpty() ? p.getProductTitle().substring(0, 1).toUpperCase() : "P" %>
             </div>
         <% } %>
     </div>
 
     <div class="pd-info">
-        <h1 class="pd-title"><%= p.getShopProductTitle() %></h1>
-        <div class="pd-price">RM <%= String.format("%.2f", p.getShopProductPrice()) %></div>
+        <h1 class="pd-title"><%= p.getProductTitle() %></h1>
+        <div class="pd-price">RM <%= String.format("%.2f", p.getProductPrice()) %></div>
         <hr class="pd-divider">
-        <div class="pd-desc"><%= p.getShopProductDesc() != null ? p.getShopProductDesc() : "" %></div>
+        <div class="pd-desc"><%= p.getProductDesc() != null ? p.getProductDesc() : "" %></div>
 
         <div class="pd-size-section">
             <div class="pd-size-label">Size</div>
@@ -127,9 +131,9 @@
 
         var fields = {
             'action': 'add',
-            'productId': '<%= p.getShopProductId() %>',
-            'title': '<%= p.getShopProductTitle().replace("'", "\\'") %>',
-            'price': '<%= p.getShopProductPrice() %>',
+            'productId': '<%= p.getProductId() %>',
+            'title': '<%= p.getProductTitle().replace("'", "\\'") %>',
+            'price': '<%= p.getProductPrice() %>',
             'imagePath': '<%= p.getProductImage() != null ? (ctx + "/" + p.getProductImage()).replace("'", "\\'") : "" %>',
             'size': selectedSize,
             'quantity': qty

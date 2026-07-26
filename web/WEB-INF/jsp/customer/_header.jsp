@@ -25,7 +25,7 @@
         <a class="brand" href="<%= ctx %>/home">PETRA</a>
         <nav class="nav">
             <a class="pill<%= "home".equals(activePage) ? " active" : "" %>" href="<%= ctx %>/home">HOME</a>
-            <a class="pill<%= "promotions".equals(activePage) ? " active" : "" %>" href="<%= ctx %>/promotions">PROMOTION</a>
+            <a class="pill<%= "advertisements".equals(activePage) ? " active" : "" %>" href="<%= ctx %>/advertisements">ADVERTISEMENTS</a>
             <a class="pill<%= "purchases".equals(activePage) ? " active" : "" %>" href="<%= ctx %>/purchases">PURCHASE</a>
             <a class="pill<%= "tickets".equals(activePage) ? " active" : "" %>" href="<%= ctx %>/tickets">TICKETS</a>
             <div class="right">
