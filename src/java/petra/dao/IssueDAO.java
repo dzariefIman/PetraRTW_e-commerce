@@ -12,10 +12,10 @@ import petra.util.DBConnection;
 
 public class IssueDAO {
 
-    public Issue findById(int id) throws SQLException {
-        String sql = "SELECT i.*, c.cust_name AS customer_name, c.cust_phone_num AS customer_phone, c.cust_email AS customer_email, o.item_desc AS item_description, "
+public Issue findById(int id) throws SQLException {
+        String sql = "SELECT i.*, c.cust_name AS customer_name, c.cust_phone_num AS customer_phone, c.cust_email AS customer_email, oi.item_desc AS item_description, "
                    + "COALESCE(lu.last_update, i.created_time) AS last_update "
-                   + "FROM issues i LEFT JOIN customers c ON i.cust_id = c.cust_id LEFT JOIN orders oi ON i.order_id = o.order_id "
+                   + "FROM issues i LEFT JOIN customers c ON i.cust_id = c.cust_id LEFT JOIN orders oi ON i.order_id = oi.order_id "
                    + "LEFT JOIN (SELECT issue_id, MAX(created_time) AS last_update FROM issue_chat GROUP BY issue_id) lu ON lu.issue_id = i.issue_id WHERE i.issue_id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
